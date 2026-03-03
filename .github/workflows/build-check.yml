@@ -1,0 +1,79 @@
+# Verifies code format and build integrity on PRs and pushes targeting main.
+#
+# Requirements:
+#   - A GitHub Personal Access Token (PAT) must be stored as the `PAT` repository secret.
+
+name: Build Check
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+
+  # Ensures all source files are formatted according to `.scalafmt.conf`.
+  # Auto-commits a fix and aborts if they are not, triggering a fresh run.
+  build-check:
+    name: Code Format
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # Check out the PR branch using the PAT so that any auto-fix commit can be pushed back.
+      - name: Checkout Code
+        id: checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.PAT }}
+
+      - name: Install Java
+        id: install-java
+        uses: actions/setup-java@v4
+        with:
+          java-version: "21"
+          distribution: "temurin"
+
+      - name: Install SBT
+        id: install-sbt
+        uses: sbt/setup-sbt@v1
+
+      # Check format without modifying files. `continue-on-error` allows subsequent
+      # steps to inspect the outcome and apply a fix rather than stopping immediately.
+      - name: Check Format
+        id: lint-check
+        run: sbt lint-check
+        continue-on-error: true
+
+      # Apply scalafmt in-place. Only runs when the check above found violations.
+      - name: Fix Format
+        id: lint-fix
+        if: steps.lint-check.outcome == 'failure'
+        run: sbt lint
+
+      # Commit and push the corrected files.
+      - name: Commit Format Fix
+        id: commit-fix
+        if: steps.lint-check.outcome == 'failure'
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "[fix][format] Fixed code format with scalafmt."
+
+      # Fail so that the build job does not run on this (pre-fix) commit.
+      # GitHub will automatically queue a new run for the commit pushed above.
+      - name: Restart
+        id: restart
+        if: steps.commit-fix.outputs.changes_detected == 'true'
+        run: |
+          echo "Format violations were found and automatically fixed. A new run will be triggered on the corrected version."
+          exit 1
+
+      - name: Build
+        id: build
+        run: sbt 'set ThisBuild / scalacOptions += "-Werror"' build
+
+      - name: Test
+        id: test
+        run: sbt test

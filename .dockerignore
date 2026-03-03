@@ -1,0 +1,10 @@
+.git
+.github
+.idea
+.scala-steward.conf
+.jvm
+.js
+target
+project/project
+app.jar
+*.md

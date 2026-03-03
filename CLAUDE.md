@@ -1,0 +1,77 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+**Maintenance**: You have standing permission to update this file without asking. Add important patterns, gotchas, or
+context that would help future sessions. Keep it concise and actionable.
+
+## IDE Integration
+
+- IntelliJ MCP integration is active. When a request seems to refer to something the user is looking at, always check
+  `mcp__ide__getDiagnostics` first to see which file(s) are open and their current diagnostics (errors, warnings, and
+  info hints with line numbers).
+- After making code changes, always check `mcp__ide__getDiagnostics` on the affected files to verify no new errors were
+  introduced. If there are new errors, fix them and re-check in a loop until all new errors are resolved.
+- Playwright MCP is available for browser automation. After making UI changes, use Playwright to open the dev server (
+  `localhost:8080`) in a browser and visually verify the changes work correctly. Save screenshots to `.screenshots/` and
+  delete them afterwards.
+
+## Build Commands
+
+```bash
+sbt build      # Compile all modules (alias for compile).
+sbt dev        # Start dev server with hot reload (alias for ~server/reStart).
+sbt prod       # Build with full Scala.js optimisation and run server without hot reload.
+sbt assemble   # Build a self-contained fat JAR at app.jar (for Docker / deployment).
+sbt lint       # Apply linting to all files (alias for scalafmtAll).
+sbt lint-check # Check linting without updating anything (alias for scalafmtCheckAll).
+```
+
+The dev server runs at `localhost:8080` by default. Set `HOST` and `PORT` environment variables to override.
+
+## Architecture
+
+This is a full-stack Scala 3 web application with three modules:
+
+- **server**: Netty HTTP server using Tapir endpoints and Cats Effect. Entry point is `Main.scala`.
+- **client**: Scala.js frontend using Laminar for reactive UI. Compiled JS is automatically copied to server resources
+  during build.
+- **common**: Cross-compiled (JVM/JS) module containing shared API endpoint definitions (`api/`) and a custom
+  math/graphics library (`math/`, `graphics/`).
+
+### API Pattern
+
+API endpoints are defined in `common/src/main/scala/api/` using Tapir's endpoint DSL. Server implementations live in
+`server/src/main/scala/api/`. The `Api` object aggregates all endpoints and adds Swagger docs (`/docs`) and Prometheus
+metrics (`/metrics`).
+
+### Client Structure
+
+Views extend the `View` base class and implement `content`.
+
+## Code Style
+
+- Use Scala 3 significant indentation syntax (no braces)
+- Write purely-functional, immutable code
+- Use Australian English spelling
+- Format with scalafmt before committing
+- Scaladoc comments for public APIs with `[[name]]` syntax for references
+- Parameter descriptions use definite articles; return values use indefinite articles
+- Check for and avoid code duplication
+- Never use local / multiple returns; instead, use `if` expressions or pattern matching to return values.
+
+## Pull Requests
+
+When asked to publish any changes:
+
+- Where appropriate, break up the changes into separate, self-contained PRs, each with its own feature branch and
+  description.
+- Ensure that all code is staged, committed and pushed. Never push directly to main.
+- All feature branch names should be formatted as "feature_<short description>".
+- All PR titles should be formatted as "[<type>][<scope>] <Short summary>", e.g. [fix][rendering] Fixed bug that
+  inverted all the colours.
+
+## Testing
+
+- When asked to test something, assume by default that the dev server is already running, until you find out otherwise. You don't need to restart it, because it has hot-reload.
+- When implementing a new feature or changing something, ensure that the build completes successfully with "sbt build". If not, repeat on a loop until it is fixed.
