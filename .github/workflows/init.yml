@@ -63,7 +63,7 @@ jobs:
             exit 0
           fi
 
-          jq 'del(._comment)' .github/rulesets/require-build-check.json \
+          jq 'del(._comment)' .github/rulesets/require-ci.json \
             | gh api "repos/${{ github.repository }}/rulesets" --method POST --input -
 
           echo "Ruleset '$RULESET_NAME' created successfully."
