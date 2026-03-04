@@ -16,7 +16,7 @@ jobs:
   # Ensures all source files are formatted according to `.scalafmt.conf`.
   # Auto-commits a fix and aborts if they are not, triggering a fresh run.
   build-check:
-    name: Code Format
+    name: Build Check
     runs-on: ubuntu-latest
 
     steps:
