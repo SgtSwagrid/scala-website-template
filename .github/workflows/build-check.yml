@@ -21,6 +21,16 @@ jobs:
 
     steps:
 
+      - name: Ensure GH_TOKEN is set
+        id: check-gh-token
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          if [ -z "$GH_TOKEN" ]; then
+            echo "::error::GH_TOKEN secret is not set. Create a GitHub Personal Access Token and add it as a repository secret named GH_TOKEN."
+            exit 1
+          fi
+
       # Check out the PR branch using GH_TOKEN so that any auto-fix commit can be pushed back.
       - name: Checkout code
         id: checkout
