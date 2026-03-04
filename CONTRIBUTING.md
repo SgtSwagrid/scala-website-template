@@ -29,7 +29,6 @@ When performance constraints necessitate the use of mutable state in a limited c
 
 When it makes sense to do so, try to hide complexity behind mathematical abstractions with obvious semantics.
 A well-chosen abstraction (like `Vec` or `AffineBijection` or `Signal`) makes the code read like the math it represents.
-Don't hesitate to introduce domain-specific algebras when they make the problem structure explicit.
 
 ## Contact
 
