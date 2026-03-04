@@ -22,8 +22,7 @@
         "do_not_enforce_on_create": false,
         "required_status_checks": [
           {
-            "context": "CI / Build Test",
-            "integration_id": 15368
+            "context": "CI / Build Test (pull_request)"
           }
         ]
       }
