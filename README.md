@@ -65,7 +65,7 @@ sbt lint
 
 The following environment variables can be set to configure your local instance:
 
-- `GH_TOKEN` - your [personal access token (PAT)](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) from GitHub, used by [Claude](https://claude.com/product/claude-code) with GitHub's [MCP server](https://github.com/github/github-mcp-server) to interact with GitHub on your behalf, and by GitHub Actions workflows. Click [here](https://github.com/settings/personal-access-tokens) to create a new PAT (only allow access to this repository, and disallow all destructive actions). Also add this as a GitHub [repository secret](https://docs.github.com/en/actions/how-tos/write-workflows/choose-what-workflows-do/use-secrets) to enable the CI workflows.
+- `GH_TOKEN` - your [personal access token (PAT)](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) from GitHub, used by [Claude](https://claude.com/product/claude-code) with GitHub's [MCP server](https://github.com/github/github-mcp-server) to interact with GitHub on your behalf. Click [here](https://github.com/settings/personal-access-tokens) to create a new PAT (only allow access to this repository, and disallow all destructive actions).
 - `HOST` - the [address](https://en.wikipedia.org/wiki/Hostname) on which the development server listens for requests (default: `localhost`).
 - `PORT` - the [port](https://en.wikipedia.org/wiki/Port_(computer_networking)) on which the development server listens for requests (default: `8080`).
 

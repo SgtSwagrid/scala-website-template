@@ -1,7 +1,4 @@
 # Verifies code format and build integrity on PRs and pushes targeting main.
-#
-# Requirements:
-#   - A GitHub Personal Access Token (PAT) must be stored as the `GH_TOKEN` repository secret.
 
 name: Build Check
 
@@ -18,26 +15,18 @@ jobs:
   build-check:
     name: Build Check
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
 
-      - name: Ensure GH_TOKEN is set
-        id: check-gh-token
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: |
-          if [ -z "$GH_TOKEN" ]; then
-            echo "::error::GH_TOKEN secret is not set. Create a GitHub Personal Access Token and add it as a repository secret named GH_TOKEN."
-            exit 1
-          fi
-
-      # Check out the PR branch using GH_TOKEN so that any auto-fix commit can be pushed back.
+      # Check out the PR branch with write access so that any auto-fix commit can be pushed back.
       - name: Checkout code
         id: checkout
         uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref }}
-          token: ${{ secrets.GH_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install Java
         id: install-java
