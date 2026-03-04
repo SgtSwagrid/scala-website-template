@@ -13,11 +13,18 @@ jobs:
   init:
     name: Initialise Repository
     runs-on: ubuntu-latest
-    permissions:
-      administration: write
-      contents: read
 
     steps:
+
+      - name: Ensure GH_TOKEN is set
+        id: check-gh-token
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          if [ -z "$GH_TOKEN" ]; then
+            echo "::error::GH_TOKEN secret is not set. Create a GitHub Personal Access Token and add it as a repository secret named GH_TOKEN."
+            exit 1
+          fi
 
       - name: Checkout code
         id: checkout
@@ -28,7 +35,7 @@ jobs:
       - name: Set PR title as default merge commit title
         id: squash-to-pr-title
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           gh api "repos/${{ github.repository }}" --method PATCH \
             --field squash_merge_commit_title=PR_TITLE
@@ -36,12 +43,12 @@ jobs:
       # Reads the ruleset definition from the JSON file, strips non-API fields,
       # then POSTs to the repository rulesets API. Skips the step if a ruleset
       # with the same name already exists.
-      - name: Add ruleset "Require Build Check"
-        id: require-build-check
+      - name: Add ruleset "Require CI"
+        id: require-ci
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          RULESET_NAME=$(jq -r '.name' .github/rulesets/require-build-check.json)
+          RULESET_NAME=$(jq -r '.name' .github/rulesets/require-ci.json)
 
           EXISTING_ID=$(gh api "repos/${{ github.repository }}/rulesets" \
             --jq ".[] | select(.name == \"$RULESET_NAME\") | .id" 2>/dev/null || true)

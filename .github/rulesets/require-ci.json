@@ -1,6 +1,6 @@
 {
-  "_comment": "Ruleset to require the build check to pass before allowing a merge.",
-  "name": "Require Build Check",
+  "_comment": "Ruleset to require the CI check to pass before allowing a merge.",
+  "name": "Require CI",
   "target": "branch",
   "enforcement": "active",
   "conditions": {
@@ -22,7 +22,7 @@
         "do_not_enforce_on_create": false,
         "required_status_checks": [
           {
-            "context": "build-check",
+            "context": "CI / Build Test",
             "integration_id": 15368
           }
         ]
