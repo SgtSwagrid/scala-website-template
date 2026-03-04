@@ -35,15 +35,16 @@ jobs:
         id: checkout
         uses: actions/checkout@v4
 
-      # Sets the default squash-merge commit title to the PR title rather than
-      # the last commit message, so merged commits are consistently named.
-      - name: Set PR title as default merge commit title
-        id: squash-to-pr-title
+      # Configures repository settings that cannot be set via static config files.
+      - name: Configure repository settings
+        id: configure
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           gh api "repos/${{ github.repository }}" --method PATCH \
-            --field squash_merge_commit_title=PR_TITLE
+            --field squash_merge_commit_title=PR_TITLE \
+            --field delete_branch_on_merge=true \
+            --field allow_update_branch=true
 
       # Reads the ruleset definition from the JSON file, strips non-API fields,
       # then POSTs to the repository rulesets API. Skips the step if a ruleset
