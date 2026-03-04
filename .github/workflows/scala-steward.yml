@@ -1,7 +1,7 @@
 # Opens pull requests for outdated dependencies once a week.
 #
 # Requirements:
-#   - A GitHub Personal Access Token (PAT) must be stored as the `PAT` repository secret.
+#   - A GitHub Personal Access Token (PAT) must be stored as the `GH_TOKEN` repository secret.
 
 name: Scala Steward
 
@@ -21,4 +21,4 @@ jobs:
       - name: Scala Steward
         uses: scala-steward-org/scala-steward-action@v2
         with:
-          github-token: ${{ secrets.PAT }}
+          github-token: ${{ secrets.GH_TOKEN }}

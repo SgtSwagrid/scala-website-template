@@ -1,7 +1,7 @@
 # Verifies code format and build integrity on PRs and pushes targeting main.
 #
 # Requirements:
-#   - A GitHub Personal Access Token (PAT) must be stored as the `PAT` repository secret.
+#   - A GitHub Personal Access Token (PAT) must be stored as the `GH_TOKEN` repository secret.
 
 name: Build Check
 
@@ -21,13 +21,13 @@ jobs:
 
     steps:
 
-      # Check out the PR branch using the PAT so that any auto-fix commit can be pushed back.
+      # Check out the PR branch using GH_TOKEN so that any auto-fix commit can be pushed back.
       - name: Checkout Code
         id: checkout
         uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref }}
-          token: ${{ secrets.PAT }}
+          token: ${{ secrets.GH_TOKEN }}
 
       - name: Install Java
         id: install-java

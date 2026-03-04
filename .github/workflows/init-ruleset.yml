@@ -1,0 +1,48 @@
+# Creates the repository branch protection ruleset defined in require-build-check.json.
+# Runs on every push to main but skips silently if the ruleset already exists,
+# so it is safe to re-run and effectively acts as a one-time initialisation step.
+#
+# Requirements:
+#   - A GitHub Personal Access Token (PAT) with repo admin scope must be stored
+#     as the `GH_TOKEN` repository secret.
+
+name: Initialise Ruleset
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+
+  init-ruleset:
+    name: Initialise Ruleset
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Reads the ruleset definition from the JSON file, strips template-specific
+      # fields (id, source) that are assigned by GitHub upon creation, then POSTs
+      # to the repository rulesets API. Skips the step if a ruleset with the same
+      # name already exists.
+      - name: Create Ruleset
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          RULESET_NAME=$(jq -r '.name' .github/workflows/require-build-check.json)
+
+          EXISTING_ID=$(gh api "repos/${{ github.repository }}/rulesets" \
+            --jq ".[] | select(.name == \"$RULESET_NAME\") | .id" 2>/dev/null || true)
+
+          if [ -n "$EXISTING_ID" ]; then
+            echo "Ruleset '$RULESET_NAME' already exists (id: $EXISTING_ID). Skipping."
+            exit 0
+          fi
+
+          jq 'del(.id, .source)' .github/workflows/require-build-check.json \
+            | gh api "repos/${{ github.repository }}/rulesets" --method POST --input -
+
+          echo "Ruleset '$RULESET_NAME' created successfully."
