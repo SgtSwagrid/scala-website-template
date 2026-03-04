@@ -1,5 +1,10 @@
 # One-time repository initialisation: applies settings and creates branch protection
 # rulesets that cannot be defined in static config files. Safe to re-run.
+#
+# Requirements:
+#   - A GitHub Personal Access Token (PAT) with admin scope must be stored as the
+#     `GH_TOKEN` repository secret. Admin access is required to manage rulesets and
+#     repository settings, which exceed GITHUB_TOKEN's maximum permissions.
 
 name: Initialise Repository
 
@@ -13,11 +18,18 @@ jobs:
   init:
     name: Initialise Repository
     runs-on: ubuntu-latest
-    permissions:
-      administration: write
-      contents: read
 
     steps:
+
+      - name: Ensure GH_TOKEN is set
+        id: check-gh-token
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          if [ -z "$GH_TOKEN" ]; then
+            echo "::error::GH_TOKEN secret is not set. Create a GitHub Personal Access Token and add it as a repository secret named GH_TOKEN."
+            exit 1
+          fi
 
       - name: Checkout code
         id: checkout
@@ -28,7 +40,7 @@ jobs:
       - name: Set PR title as default merge commit title
         id: squash-to-pr-title
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           gh api "repos/${{ github.repository }}" --method PATCH \
             --field squash_merge_commit_title=PR_TITLE
@@ -39,7 +51,7 @@ jobs:
       - name: Add ruleset "Require Build Check"
         id: require-build-check
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           RULESET_NAME=$(jq -r '.name' .github/rulesets/require-build-check.json)
 
