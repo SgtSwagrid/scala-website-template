@@ -1,7 +1,4 @@
 # Verifies code format and build integrity on PRs and pushes targeting main.
-#
-# Requirements:
-#   - A GitHub Personal Access Token (PAT) must be stored as the `PAT` repository secret.
 
 name: Build Check
 
@@ -16,18 +13,20 @@ jobs:
   # Ensures all source files are formatted according to `.scalafmt.conf`.
   # Auto-commits a fix and aborts if they are not, triggering a fresh run.
   build-check:
-    name: Code Format
+    name: Build Check
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
 
-      # Check out the PR branch using the PAT so that any auto-fix commit can be pushed back.
-      - name: Checkout Code
+      # Check out the PR branch with write access so that any auto-fix commit can be pushed back.
+      - name: Checkout code
         id: checkout
         uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref }}
-          token: ${{ secrets.PAT }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install Java
         id: install-java
@@ -42,19 +41,19 @@ jobs:
 
       # Check format without modifying files. `continue-on-error` allows subsequent
       # steps to inspect the outcome and apply a fix rather than stopping immediately.
-      - name: Check Format
+      - name: Check format
         id: lint-check
         run: sbt lint-check
         continue-on-error: true
 
       # Apply scalafmt in-place. Only runs when the check above found violations.
-      - name: Fix Format
+      - name: Fix format
         id: lint-fix
         if: steps.lint-check.outcome == 'failure'
         run: sbt lint
 
       # Commit and push the corrected files.
-      - name: Commit Format Fix
+      - name: Commit format fix
         id: commit-fix
         if: steps.lint-check.outcome == 'failure'
         uses: stefanzweifel/git-auto-commit-action@v5
@@ -63,7 +62,7 @@ jobs:
 
       # Fail so that the build job does not run on this (pre-fix) commit.
       # GitHub will automatically queue a new run for the commit pushed above.
-      - name: Restart
+      - name: Restart after format fix
         id: restart
         if: steps.commit-fix.outputs.changes_detected == 'true'
         run: |
