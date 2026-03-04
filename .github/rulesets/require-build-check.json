@@ -1,9 +1,7 @@
 {
-  "id": 13506154,
+  "_comment": "Ruleset to require the build check to pass before allowing a merge.",
   "name": "Require Build Check",
   "target": "branch",
-  "source_type": "Repository",
-  "source": "SgtSwagrid/scala-website-template",
   "enforcement": "active",
   "conditions": {
     "ref_name": {

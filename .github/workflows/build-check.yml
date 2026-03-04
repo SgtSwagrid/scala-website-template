@@ -22,7 +22,7 @@ jobs:
     steps:
 
       # Check out the PR branch using GH_TOKEN so that any auto-fix commit can be pushed back.
-      - name: Checkout Code
+      - name: Checkout code
         id: checkout
         uses: actions/checkout@v4
         with:
@@ -42,19 +42,19 @@ jobs:
 
       # Check format without modifying files. `continue-on-error` allows subsequent
       # steps to inspect the outcome and apply a fix rather than stopping immediately.
-      - name: Check Format
+      - name: Check format
         id: lint-check
         run: sbt lint-check
         continue-on-error: true
 
       # Apply scalafmt in-place. Only runs when the check above found violations.
-      - name: Fix Format
+      - name: Fix format
         id: lint-fix
         if: steps.lint-check.outcome == 'failure'
         run: sbt lint
 
       # Commit and push the corrected files.
-      - name: Commit Format Fix
+      - name: Commit format fix
         id: commit-fix
         if: steps.lint-check.outcome == 'failure'
         uses: stefanzweifel/git-auto-commit-action@v5
@@ -63,7 +63,7 @@ jobs:
 
       # Fail so that the build job does not run on this (pre-fix) commit.
       # GitHub will automatically queue a new run for the commit pushed above.
-      - name: Restart
+      - name: Restart after format fix
         id: restart
         if: steps.commit-fix.outputs.changes_detected == 'true'
         run: |
