@@ -6,7 +6,7 @@
 #     `GH_TOKEN` repository secret. Admin access is required to manage rulesets and
 #     repository settings, which exceed GITHUB_TOKEN's maximum permissions.
 
-name: Initialise Repository
+name: Initialisation
 
 on:
   push:
