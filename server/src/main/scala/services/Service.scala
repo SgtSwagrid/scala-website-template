@@ -53,4 +53,4 @@ trait Service(serviceName: String):
 
   /** A combination of the endpoints from [[api]], [[docs]], and [[metrics]]. */
   final lazy val all: List[Endpoint] = api ++
-    (if Env.DEV_MODE then docs else Seq.empty) :+ metrics
+    (if Env.DEV_MODE then docs else List.empty) :+ metrics
