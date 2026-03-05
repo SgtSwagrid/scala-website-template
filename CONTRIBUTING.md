@@ -7,7 +7,7 @@
 3. Make your changes and format: `sbt lint`
 4. Commit (`git add -A` then `git commit -m "<description>"`) and push (`git push`).
 5. Create a pull request to `main`, with the title formatted as `[<type>][<scope>] <Description>`, e.g. `[fix][render] Solved inverted colours.`
-6. Before merging, the code must pass the build check (defined in [build-check.yml](./.github/workflows/build-check.yml)).
+6. Before merging, the code must pass the build test (defined in [ci.yml](./.github/workflows/ci.yml)).
 
 ## Code Style
 
@@ -29,6 +29,11 @@ When performance constraints necessitate the use of mutable state in a limited c
 
 When it makes sense to do so, try to hide complexity behind mathematical abstractions with obvious semantics.
 A well-chosen abstraction (like `Vec` or `AffineBijection` or `Signal`) makes the code read like the math it represents.
+
+## Branching Strategy
+
+This project follows simple [trunk-based](https://trunkbaseddevelopment.com/) development.
+All development happens on short-lived feature branches, which are merged into `main` when complete.
 
 ## Contact
 
