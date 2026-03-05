@@ -15,6 +15,14 @@ Furthermore, this template has only been tested on Windows 11.
 Other operating systems will likely work, but don't be surprised if platform-specific adjustments are necessary.
 In case you find yourself having to make adjustments, please consider contributing those adjustments back to the template.
 
+### Using this template
+
+To use this template, click the "Use this template" button at the top of the repository page on GitHub, and follow the instructions to create a new repository.
+You'll need to set the `name`, `organization`, and `version` fields in [build.sbt](./build.sbt) and `projectRoot` in [Subprojects.scala](./project/Subprojects.scala).
+You may also wish to set the `GH_TOKEN` local environment variable _and_ GitHub repository secret (see [Environment Variables](#environment-variables)) to help with agentic and CI workflows.
+Thereafter, the template should work out-of-the-box, and you can start building your website immediately.
+If you haven't already, you may also want to read the documentation on [Laminar](https://laminar.dev/).
+
 ## Requirements
 
 In order to locally run or work on this project, you'll need to have the following installed:
