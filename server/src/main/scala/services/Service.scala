@@ -52,4 +52,5 @@ trait Service(serviceName: String):
     .metricsEndpoint
 
   /** A combination of the endpoints from [[api]], [[docs]], and [[metrics]]. */
-  final lazy val all: List[Endpoint] = api ++ docs :+ metrics
+  final lazy val all: List[Endpoint] = api ++
+    (if Env.DEV_MODE then docs else Seq.empty) :+ metrics
