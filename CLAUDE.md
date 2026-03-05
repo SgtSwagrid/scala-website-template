@@ -36,14 +36,12 @@ This is a full-stack Scala 3 web application with three modules:
 - **server**: Netty HTTP server using Tapir endpoints and Cats Effect. Entry point is `Main.scala`.
 - **client**: Scala.js frontend using Laminar for reactive UI. Compiled JS is automatically copied to server resources
   during build.
-- **common**: Cross-compiled (JVM/JS) module containing shared API endpoint definitions (`api/`) and a custom
-  math/graphics library (`math/`, `graphics/`).
+- **common**: Cross-compiled (JVM/JS) module containing shared code.
 
 ### API Pattern
 
-API endpoints are defined in `common/src/main/scala/api/` using Tapir's endpoint DSL. Server implementations live in
-`server/src/main/scala/api/`. The `Api` object aggregates all endpoints and adds Swagger docs (`/docs`) and Prometheus
-metrics (`/metrics`).
+API endpoints are defined in `server/src/main/scala/api/` using Tapir's endpoint DSL. Server implementations live in
+`server/src/main/scala/services/`. Swagger docs (`/docs`) and Prometheus metrics (`/metrics`) are available.
 
 ### Client Structure
 
@@ -57,8 +55,10 @@ Views extend the `View` base class and implement `content`.
 - Format with scalafmt before committing
 - Scaladoc comments for public APIs with `[[name]]` syntax for references
 - Parameter descriptions use definite articles; return values use indefinite articles
-- Check for and avoid code duplication
+- Actively check for and avoid code duplication, and try to combine things where possible.
 - Never use local / multiple returns; instead, use `if` expressions or pattern matching to return values.
+- Hide complexity behind well-named mathematical abstractions where possible, so that the code reads like the math it represents.
+- When in doubt, follow the style of existing code in the repository.
 
 ## Pull Requests
 
