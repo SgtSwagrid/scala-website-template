@@ -7,25 +7,25 @@ object Dependencies {
 
   /** The version to use for each dependency. */
   lazy val V = new {
-    val tapir            = "1.13.9"
-    val slf4j            = "2.0.17"
-    val logback          = "1.5.32"
-    val fs2              = "3.12.2"
-    val scalajs          = "2.8.0"
-    val laminar          = "17.0.0"
-    val laminext         = "0.17.0"
-    val circe            = "0.14.15"
-    val cats             = "2.13.0"
-    val catsEffect       = "3.6.3"
-    val catsMtl          = "1.6.0"
-    val catsCollections  = "0.9.10"
-    val munit            = "1.0.3"
-    val munitCatsEffect  = "2.0.0"
+    val tapir           = "1.13.9"
+    val slf4j           = "2.0.17"
+    val logback         = "1.5.32"
+    val fs2             = "3.12.2"
+    val scalajs         = "2.8.0"
+    val laminar         = "17.2.1"
+    val laminext        = "0.17.0"
+    val circe           = "0.14.15"
+    val cats            = "2.13.0"
+    val catsEffect      = "3.6.3"
+    val catsMtl         = "1.6.0"
+    val catsCollections = "0.9.10"
+    val munit           = "1.0.3"
+    val munitCatsEffect = "2.0.0"
   }
 
   /**
-   * Core Tapir dependencies for defining API endpoints. Cross-compiled for
-   * both JVM and Scala.js; safe to use in the common cross-project.
+   * Core Tapir dependencies for defining API endpoints. Cross-compiled for both
+   * JVM and Scala.js; safe to use in the common cross-project.
    */
   lazy val tapirCommon = libraryDependencies ++= Seq(
     "com.softwaremill.sttp.tapir" %% "tapir-core"       % V.tapir,
@@ -88,7 +88,5 @@ object Dependencies {
 
   /** Library dependencies for testing with MUnit and Cats Effect. */
   lazy val munitCatsEffect = libraryDependencies ++=
-    Seq(
-      "org.typelevel" %%% "munit-cats-effect" % V.munitCatsEffect % Test,
-    )
+    Seq("org.typelevel" %%% "munit-cats-effect" % V.munitCatsEffect % Test)
 }
