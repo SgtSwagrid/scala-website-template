@@ -21,17 +21,9 @@ target/
 .bloop
 metals.sbt
 
-# Agents:
-.claude/settings.local.json
-.playwright-mcp/
-.screenshots/
-
-# IDEs:
-.idea/*
-.vscode/
-
 # Share IntelliJ code style, dictionaries, templates, and plugins:
-!.idea/codeStyles/         
+.idea/*
+!.idea/codeStyles/
 !.idea/dictionaries/
 !.idea/fileTemplates/
 !.idea/inspectionProfiles/
@@ -42,3 +34,13 @@ metals.sbt
 !.idea/scala_compiler.xml
 !.idea/scala_settings.xml
 !.idea/vcs.xml
+
+# Share VSCode workspace settings and extensions:
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+
+# Agents:
+.claude/settings.local.json
+.claude/worktrees/
+.playwright-mcp/
