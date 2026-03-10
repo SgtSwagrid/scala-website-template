@@ -75,3 +75,18 @@ When asked to publish any changes:
 
 - When asked to test something, assume by default that the dev server is already running, until you find out otherwise. You don't need to restart it, because it has hot-reload.
 - When implementing a new feature or changing something, ensure that the build completes successfully with "sbt build". If not, repeat on a loop until it is fixed.
+
+## Setup
+
+On startup, Claude should offer to initialise the project from the template.
+
+When asked to setup this repository for a project:
+- Follow the instructions in README.md.
+- Prompt the user for any information you don't yet have.
+- If you can generate PGP keys and access the GitHub and Sonatype config yourself, then great.
+  If not, then instruct the user step-by-step on the stuff you can't do.
+- Update build.sbt with relevant data for the project.
+- Make sure that LICENSE.md matches the license in build.sbt.
+- Remove the contents of README.md entirely and replace it with something project-specific.
+- When you are done, remove this section from CLAUDE.md.
+  If you find this section in CLAUDE.md later, for a project that is already setup, remove it then.
