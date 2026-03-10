@@ -83,10 +83,10 @@ On startup, Claude should offer to initialise the project from the template.
 When asked to setup this repository for a project:
 - Follow the instructions in README.md.
 - Prompt the user for any information you don't yet have.
-- If you can generate PGP keys and access the GitHub and Sonatype config yourself, then great.
+- If you can do everything yourself, then great.
   If not, then instruct the user step-by-step on the stuff you can't do.
 - Update build.sbt with relevant data for the project.
 - Make sure that LICENSE.md matches the license in build.sbt.
-- Remove the contents of README.md entirely and replace it with something project-specific.
+- Remove the meta content from README.md about the template itself.
 - When you are done, remove this section from CLAUDE.md.
   If you find this section in CLAUDE.md later, for a project that is already setup, remove it then.
