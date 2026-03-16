@@ -10,11 +10,10 @@
 
 <!-- Describe how this was tested to ensure correctness. -->
 
-- [ ] Code compiles without errors or warnings (`sbt build`)
-- [ ] Code is formatted correctly (`sbt lint-check`)
+- [ ] Code compiles without errors or warnings (`sbt compile`)
+- [ ] Code is formatted correctly (`sbt scalafmtCheckAll`)
 - [ ] All unit tests pass (`sbt test`)
 - [ ] Additional unit tests added for new functionality (if applicable)
-- [ ] Manually verified with dev server (`sbt dev`)
 
 ## Notes
 

@@ -9,31 +9,6 @@
         "Authorization": "Bearer ${GH_TOKEN}"
       }
     },
-    "sequential-thinking": {
-      "_comment": "Tools for complex reasoning.",
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-sequential-thinking"
-      ]
-    },
-    "claude-historian-mcp": {
-      "_comment": "Search for conversation history.",
-      "command": "npx",
-      "args": [
-        "claude-historian-mcp"
-      ],
-      "env": {}
-    },
-    "playwright": {
-      "_comment": "Integration with Playwright, for testing website behaviour.",
-      "command": "npx",
-      "args": [
-        "@playwright/mcp@latest",
-        "--browser",
-        "firefox"
-      ]
-    },
     "jetbrains": {
       "_comment": "Integration with JetBrains IDEs.",
       "type": "sse",

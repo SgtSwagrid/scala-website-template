@@ -1,5 +1,3 @@
-# Verifies code format and build integrity on PRs and pushes targeting main.
-
 name: CI
 
 on:
@@ -15,6 +13,7 @@ concurrency:
 
 jobs:
 
+  # Verify code format and build integrity for every PR.
   build-test:
     name: Build Test
     runs-on: ubuntu-latest
@@ -27,7 +26,7 @@ jobs:
         id: checkout
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.head_ref }}
+          ref: ${{ github.head_ref || github.ref_name }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install Java
@@ -36,6 +35,7 @@ jobs:
         with:
           java-version: "21"
           distribution: "temurin"
+          cache: sbt
 
       - name: Install SBT
         id: install-sbt
@@ -45,14 +45,14 @@ jobs:
       # steps to inspect the outcome and apply a fix rather than stopping immediately.
       - name: Check format
         id: lint-check
-        run: sbt lint-check
+        run: sbt scalafmtCheckAll
         continue-on-error: true
 
       # Apply scalafmt in-place. Only runs when the check above found violations.
       - name: Fix format
         id: lint-fix
         if: steps.lint-check.outcome == 'failure'
-        run: sbt lint
+        run: sbt scalafmtAll
 
       # Commit and push the corrected files.
       - name: Commit format fix
@@ -71,8 +71,8 @@ jobs:
           exit 1
 
       - name: Build
-        id: build
-        run: sbt 'set ThisBuild / scalacOptions += "-Werror"' build
+        id: build-test
+        run: sbt 'set ThisBuild / scalacOptions += "-Werror"' compile
 
       - name: Test
         id: test
