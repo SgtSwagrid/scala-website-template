@@ -2,18 +2,18 @@
 
 root = true
 
-# Set default charset, line endings, and whitespace handling for all files:
+# Set default charset, line endings, and whitespace handling for all files.
 [*]
 charset                  = utf-8
 end_of_line              = lf
 insert_final_newline     = true
 trim_trailing_whitespace = true
 
-# Always use an indentation of 2 spaces:
+# Always use an indentation of 2 spaces.
 [*.{scala,java,kt,sbt,conf,json,md,yml,yaml,htm,html,xml,js,ts,py}]
 indent_style = space
 indent_size  = 2
 
-# Disable IntelliJ formatting for build scripts as they require Scala 2 syntax:
+# Disable IntelliJ formatting for build scripts as they require Scala 2 syntax.
 [project/**.scala]
 ij_formatter_enabled = false

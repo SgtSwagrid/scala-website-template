@@ -1,10 +1,10 @@
-# Force git to always use Unix-style line endings ('\n'):
+# Force git to always use Unix-style line endings ('\n').
 * text eol=lf
 
-# Except for '.bat' files:
+# Except for '.bat' files.
 *.bat text eol=crlf
 
-# Ensure source files are recognised as text:
+# Ensure source files are recognised as text.
 *.scala text
 *.sbt text
 *.md text
@@ -18,7 +18,7 @@
 *.properties text
 *.sh text
 
-# Ensure binary files are recognised as such:
+# Ensure binary files are recognised as binaries.
 *.jpg binary
 *.jpeg binary
 *.png binary

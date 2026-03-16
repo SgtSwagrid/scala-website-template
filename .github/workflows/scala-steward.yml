@@ -1,4 +1,4 @@
-# Opens pull requests for outdated dependencies once a week.
+# Opens pull requests for outdated dependencies once per week.
 
 name: Scala Steward
 
