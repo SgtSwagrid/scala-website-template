@@ -10,18 +10,18 @@ import sttp.tapir.*
 object CoreApi:
 
   /**
-   * An asset is a static file that is served to the client, such as a script or
-   * image. It is represented as a tuple of the file's contents as raw bytes,
-   * its content type, and its ETag for cache validation.
-   */
+    * An asset is a static file that is served to the client, such as a script
+    * or image. It is represented as a tuple of the file's contents as raw
+    * bytes, its content type, and its ETag for cache validation.
+    */
   type Asset = (Array[Byte], String, String)
 
   /**
-   * An endpoint that serves static files from the client's "resources"
-   * directory. Supports conditional GET via the `If-None-Match` request header:
-   * if the asset's ETag matches, a `304 Not Modified` response is returned with
-   * no body.
-   */
+    * An endpoint that serves static files from the client's "resources"
+    * directory. Supports conditional GET via the `If-None-Match` request
+    * header: if the asset's ETag matches, a `304 Not Modified` response is
+    * returned with no body.
+    */
   val assets
     : PublicEndpoint[(List[String], Option[String]), StatusCode, (Array[Byte], String, String, String), Any] =
     endpoint
@@ -36,13 +36,13 @@ object CoreApi:
       .out(header[String]("Cache-Control"))
 
   /**
-   * An endpoint that establishes a websocket connection so that the client is
-   * able to detect when the server has been restarted, at which time the client
-   * will proceed by reloading the page.
-   *
-   * @note
-   *   Only available in development mode.
-   */
+    * An endpoint that establishes a websocket connection so that the client is
+    * able to detect when the server has been restarted, at which time the
+    * client will proceed by reloading the page.
+    *
+    * @note
+    *   Only available in development mode.
+    */
   val hotReload = endpoint
     .get
     .in("hot-reload")
@@ -56,9 +56,9 @@ object CoreApi:
     )
 
   /**
-   * A health check endpoint that confirms the server is running and able to
-   * accept requests.
-   */
+    * A health check endpoint that confirms the server is running and able to
+    * accept requests.
+    */
   val health = endpoint.get.in("health").out(stringBody)
 
   /** Serves the index page of the website. */

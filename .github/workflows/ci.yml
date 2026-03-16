@@ -60,7 +60,7 @@ jobs:
         if: steps.lint-check.outcome == 'failure'
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "[fix][format] Fixed code format with scalafmt."
+          commit_message: "[format] Fix code formatting with scalafmt."
 
       # Fail so that the build job does not run on this (pre-fix) commit.
       - name: Restart after format fix

@@ -9,10 +9,10 @@ import scala.scalajs.js.annotation.{JSExport, JSExportTopLevel}
 object HotReload:
 
   /**
-   * Initialise automatic reloading. When the server is restarted (detected
-   * through WebSocket disconnection), the client will repeatedly attempt to
-   * reconnect until it is successful. For use during development.
-   */
+    * Initialise automatic reloading. When the server is restarted (detected
+    * through WebSocket disconnection), the client will repeatedly attempt to
+    * reconnect until it is successful. For use during development.
+    */
   @JSExport
   def enable(): Unit =
 
