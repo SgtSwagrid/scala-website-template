@@ -9,11 +9,11 @@ import your_name.project_name.server.services.CoreService
 object Main extends ResourceApp.Forever:
 
   /**
-   * The main entry point for this application. To run, use "sbt dev".
-   *
-   * @param args
-   *   Unused.
-   */
+    * The main entry point for this application. To run, use "sbt dev".
+    *
+    * @param args
+    *   Unused.
+    */
   def run(args: List[String]) =
 
     NettyCatsServer
