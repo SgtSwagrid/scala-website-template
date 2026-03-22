@@ -125,6 +125,7 @@ Dependencies are defined in [Subprojects.scala](./project/Dependencies.scala).
 - **[Netty](https://netty.io/)** - an asynchronous web server for the JVM (integrated with Tapir, among other [options](https://tapir.softwaremill.com/en/latest/server/overview.html)).
 - **[Swagger](https://swagger.io/)** - a UI for exploring and testing server endpoints (integrated with Tapir, see [localhost:8080/docs](localhost:8080/docs)).
 - **[Prometheus](https://prometheus.io/)** - for metrics and performance monitoring (integrated with Tapir, not yet enabled).
+- **[asset-loader](https://github.com/SgtSwagrid/asset-loader)** - for serving static assets.
 - **[Scala.js](https://www.scala-js.org/)** - the official Scala-to-JS transpiler.
 - **[Laminar 17](https://laminar.dev/)** - a library for building reactive web-based user interfaces (and extended by [laminext](https://github.com/tulz-app/laminext)).
 - **[Airstream](https://github.com/raquo/airstream)** - a [functional reactive programming](https://en.wikipedia.org/wiki/Functional_reactive_programming) library (required by Laminar).
