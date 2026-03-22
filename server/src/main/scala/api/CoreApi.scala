@@ -2,38 +2,24 @@ package your_name.project_name.server
 package api
 
 import cats.effect.IO
+import io.github.sgtswagrid.assetloader.Asset
+import io.github.sgtswagrid.assetloader.tapir.AssetService
+import scala.NamedTuple.DropNames
 import sttp.capabilities.fs2.Fs2Streams
 import sttp.model.StatusCode
 import sttp.tapir.*
+import your_name.project_name.server.config.Env
 
 /** These are general endpoints which are used across the entire application. */
 object CoreApi:
 
-  /**
-    * An asset is a static file that is served to the client, such as a script
-    * or image. It is represented as a tuple of the file's contents as raw
-    * bytes, its content type, and its ETag for cache validation.
-    */
-  type Asset = (Array[Byte], String, String)
+  private val assetService =
+    new AssetService("assets", Env.ASSETS_DIR, if Env.DEV_MODE then 0 else 3600)
 
-  /**
-    * An endpoint that serves static files from the client's "resources"
-    * directory. Supports conditional GET via the `If-None-Match` request
-    * header: if the asset's ETag matches, a `304 Not Modified` response is
-    * returned with no body.
-    */
+  /** An endpoint that serves static files from the client's resources. */
   val assets
-    : PublicEndpoint[(List[String], Option[String]), StatusCode, (Array[Byte], String, String, String), Any] =
-    endpoint
-      .get
-      .in("assets")
-      .in(paths)
-      .in(header[Option[String]]("If-None-Match"))
-      .errorOut(statusCode)
-      .out(byteArrayBody)
-      .out(header[String]("Content-Type"))
-      .out(header[String]("ETag"))
-      .out(header[String]("Cache-Control"))
+    : PublicEndpoint[(List[String], Option[String]), StatusCode, DropNames[Asset], Any] =
+    assetService.publicEndpoint
 
   /**
     * An endpoint that establishes a websocket connection so that the client is

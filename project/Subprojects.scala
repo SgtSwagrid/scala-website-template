@@ -39,6 +39,7 @@ object Subprojects {
       // Server dependencies:
       Dependencies.tapirCommon,
       Dependencies.tapirServer,
+      Dependencies.assetLoader,
       Dependencies.logging,
       Dependencies.fs2,
       Dependencies.circe,
@@ -126,17 +127,17 @@ object Subprojects {
     )
 
   /**
-   * Helper method for setting a Java system property from an SBT setting.
-   *
-   * @param key
-   *   The name of the system property to set.
-   *
-   * @param obj
-   *   The value to set the system property to (converted to a string).
-   *
-   * @return
-   *   A JVM command-line argument that sets the system property.
-   */
+    * Helper method for setting a Java system property from an SBT setting.
+    *
+    * @param key
+    *   The name of the system property to set.
+    *
+    * @param obj
+    *   The value to set the system property to (converted to a string).
+    *
+    * @return
+    *   A JVM command-line argument that sets the system property.
+    */
   private def setProperty(key: String, obj: Any): String =
     s"-D$key=${ obj.toString }"
 }
