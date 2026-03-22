@@ -76,6 +76,7 @@
       <option name="SCALAFMT_REFORMAT_ON_FILES_SAVE" value="true" />
       <option name="SCALAFMT_FALLBACK_TO_DEFAULT_SETTINGS" value="true" />
       <option name="FORMATTER" value="1" />
+      <option name="USE_SCALADOC2_FORMATTING" value="true" />
       <option name="MULTILINE_STRING_INSERT_MARGIN_ON_ENTER" value="false" />
       <option name="MULTILINE_STRING_ALIGN_DANGLING_CLOSING_QUOTES" value="true" />
       <option name="MULTILINE_STRING_CLOSING_QUOTES_ON_NEW_LINE" value="true" />
@@ -88,6 +89,10 @@
       <option name="TYPE_ANNOTATION_EXCLUDE_MEMBER_OF_ANONYMOUS_CLASS" value="true" />
       <option name="TYPE_ANNOTATION_EXCLUDE_MEMBER_OF_PRIVATE_CLASS" value="true" />
       <option name="TYPE_ANNOTATION_EXCLUDE_IN_TEST_SOURCES" value="true" />
+      <option name="SD_BLANK_LINE_AFTER_PARAMETERS_COMMENTS" value="true" />
+      <option name="SD_BLANK_LINE_AFTER_RETURN_COMMENTS" value="true" />
+      <option name="SD_BLANK_LINE_BETWEEN_PARAMETERS" value="true" />
+      <option name="SD_BLANK_LINE_BEFORE_PARAMETERS" value="true" />
       <option name="TRAILING_COMMA_MODE" value="TRAILING_COMMA_ADD_WHEN_MULTILINE" />
       <option name="TRAILING_COMMA_TUPLE_ENABLED" value="true" />
       <option name="TRAILING_COMMA_PATTERN_ARG_LIST_ENABLED" value="true" />
