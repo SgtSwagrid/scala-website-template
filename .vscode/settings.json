@@ -7,9 +7,12 @@
     "detectIndentation": false,
     "stickyScroll": {
       "enabled": false
-    },
+    }
   },
-  "files.insertFinalNewline": true,
+  "files": {
+    "eol": "\n",
+    "insertFinalNewline": true
+  }
   "files.watcherExclude": {
     "**/target": true,
     "**/.bloop": true,
