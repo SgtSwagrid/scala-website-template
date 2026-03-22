@@ -2,6 +2,8 @@ package your_name.project_name.server
 package api
 
 import cats.effect.IO
+import io.github.sgtswagrid.assetloader.Asset
+import scala.NamedTuple.DropNames
 import sttp.capabilities.fs2.Fs2Streams
 import sttp.model.StatusCode
 import sttp.tapir.*
@@ -9,21 +11,9 @@ import sttp.tapir.*
 /** These are general endpoints which are used across the entire application. */
 object CoreApi:
 
-  /**
-   * An asset is a static file that is served to the client, such as a script or
-   * image. It is represented as a tuple of the file's contents as raw bytes,
-   * its content type, and its ETag for cache validation.
-   */
-  type Asset = (Array[Byte], String, String)
-
-  /**
-   * An endpoint that serves static files from the client's "resources"
-   * directory. Supports conditional GET via the `If-None-Match` request header:
-   * if the asset's ETag matches, a `304 Not Modified` response is returned with
-   * no body.
-   */
+  /** An endpoint that serves static files from `client/src/main/resources`. */
   val assets
-    : PublicEndpoint[(List[String], Option[String]), StatusCode, (Array[Byte], String, String, String), Any] =
+    : PublicEndpoint[(List[String], Option[String]), StatusCode, DropNames[Asset], Any] =
     endpoint
       .get
       .in("assets")

@@ -41,6 +41,7 @@ object Subprojects {
       Dependencies.tapirServer,
       Dependencies.logging,
       Dependencies.fs2,
+      Dependencies.assetLoader,
       Dependencies.circe,
       Dependencies.cats,
       Dependencies.munitCatsEffect,

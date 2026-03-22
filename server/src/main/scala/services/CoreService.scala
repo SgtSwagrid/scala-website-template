@@ -2,10 +2,10 @@ package your_name.project_name.server
 package services
 
 import cats.effect.IO
+import io.github.sgtswagrid.assetloader.AssetLoader
 import sttp.model.StatusCode
 import your_name.project_name.server.api.CoreApi
 import your_name.project_name.server.api.CoreApi.health
-import your_name.project_name.server.assets.AssetLoader
 import your_name.project_name.server.config.Env
 import your_name.project_name.server.html.Template
 
@@ -15,17 +15,10 @@ import your_name.project_name.server.html.Template
  */
 object CoreService extends Service("core"):
 
-  private val assetLoader = new AssetLoader
-
-  /**
-   * The `Cache-Control` header value used when serving static assets. In
-   * development mode, `no-cache` is used so that the browser always revalidates
-   * against the server's ETag, ensuring updated assets are fetched immediately.
-   * In production, `public, max-age=3600` allows browsers and intermediary
-   * caches to serve assets directly for up to one hour before revalidating.
-   */
-  private val cacheControl: String =
-    if Env.DEV_MODE then "no-cache" else "public, max-age=3600"
+  private val assetLoader = AssetLoader(
+    assetsPath = Env.ASSETS_DIR,
+    maxAge = if Env.DEV_MODE then 0 else 3600,
+  )
 
   /**
    * An endpoint that serves static files from the client's "resources"
@@ -35,10 +28,10 @@ object CoreService extends Service("core"):
     .assets
     .serverLogicPure: (path, ifNoneMatch) =>
       assetLoader.getAsset(path) match
-        case None                             => Left(StatusCode.NotFound)
-        case Some((bytes, contentType, etag)) =>
-          if ifNoneMatch.contains(etag) then Left(StatusCode.NotModified)
-          else Right((bytes, contentType, etag, cacheControl))
+        case None        => Left(StatusCode.NotFound)
+        case Some(asset) =>
+          if ifNoneMatch.contains(asset.etag) then Left(StatusCode.NotModified)
+          else Right(asset)
 
   /**
    * An endpoint that establishes a websocket connection so that the client is
