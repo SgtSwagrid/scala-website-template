@@ -11,7 +11,7 @@ object Dependencies {
     val slf4j           = "2.0.17"
     val logback         = "1.5.32"
     val fs2             = "3.13.0"
-    val assetLoader     = "0.1.4"
+    val assetLoader     = "0.1.5"
     val scalajs         = "2.8.0"
     val laminar         = "17.0.0"
     val laminext        = "0.17.0"
