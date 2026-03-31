@@ -1,6 +1,6 @@
 <div align="center">
   <h1>🌐 Scala Website Template</h1>
-  <p>A reusable template for full stack websites developed in Scala, with build config and essential libraries.</p>
+  <p>A reusable template for full stack websites in Scala.
 </div>
 
 ## ❗ Disclaimer
