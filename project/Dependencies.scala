@@ -21,7 +21,7 @@ object Dependencies {
     val catsMtl         = "1.6.0"
     val catsCollections = "0.9.10"
     val munit           = "1.0.3"
-    val munitCatsEffect = "2.0.0"
+    val munitCatsEffect = "2.2.0"
   }
 
   /**
