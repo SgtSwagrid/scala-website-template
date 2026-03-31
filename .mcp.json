@@ -12,7 +12,7 @@
     "jetbrains": {
       "_comment": "Integration with JetBrains IDEs.",
       "type": "sse",
-      "url": "http://localhost:64342/sse"
+      "url": "http://localhost:64952/sse"
     }
   }
 }

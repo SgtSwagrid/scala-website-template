@@ -14,8 +14,11 @@ import your_name.project_name.server.html.Template
   */
 object CoreService extends Service("core"):
 
-  private val assetService =
-    new AssetService("assets", Env.ASSETS_DIR, if Env.DEV_MODE then 0 else 3600)
+  private val assetService = new AssetService(
+    "assets",
+    Env.ASSETS_DIR,
+    if Env.DEV_MODE then 0 else 3600,
+  )
 
   /**
     * An endpoint that serves static files from the client's "resources"
@@ -49,7 +52,10 @@ object CoreService extends Service("core"):
   lazy val index: Endpoint = CoreApi
     .index
     .serverLogicSuccessPure: _ =>
-      Template(viewName = "IndexView", pageTitle = "My Website")
+      Template(
+        viewName = "IndexView",
+        pageTitle = "My Website",
+      )
 
   lazy val api: List[Endpoint] = List(assets, health, index) ++
     Option.when(Env.DEV_MODE)(hotReload)

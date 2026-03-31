@@ -13,13 +13,20 @@ import your_name.project_name.server.config.Env
 /** These are general endpoints which are used across the entire application. */
 object CoreApi:
 
-  private val assetService =
-    new AssetService("assets", Env.ASSETS_DIR, if Env.DEV_MODE then 0 else 3600)
+  private val assetService = new AssetService(
+    "assets",
+    Env.ASSETS_DIR,
+    if Env.DEV_MODE then 0 else 3600,
+  )
 
   /** An endpoint that serves static files from the client's resources. */
   val assets
-    : PublicEndpoint[(List[String], Option[String]), StatusCode, DropNames[Asset], Any] =
-    assetService.publicEndpoint
+    : PublicEndpoint[
+      (List[String], Option[String]),
+      StatusCode,
+      DropNames[Asset],
+      Any,
+    ] = assetService.publicEndpoint
 
   /**
     * An endpoint that establishes a websocket connection so that the client is
