@@ -20,6 +20,12 @@ Furthermore, this template has only been tested on Windows 11.
 Other operating systems will likely work, but don't be surprised if platform-specific adjustments are necessary.
 In case you find yourself having to make adjustments, please consider contributing those adjustments back to the template.
 
+## 📋 What's included?
+
+1. Everything from [`SgtSwagrid/scala-config`](https://github.com/SgtSwagrid/scala-config), including reasonable [Scalafmt](https://scalameta.org/scalafmt/) settings, CI piplines for build integrity, and some IDE config.
+2. A collection of common libraries that work well together (see [Dependencies](#-dependencies)).
+3. Example build configuration and setup instructions. In particular, this demonstrates how to serve compiled Scala code to the client as a static JavaScript file.
+
 ## 🔨 How to use this template
 
 ### 1. Create your repository
