@@ -3,6 +3,7 @@ package services
 
 import cats.effect.IO
 import io.github.sgtswagrid.assetloader.tapir.AssetService
+import sttp.tapir.*
 import your_name.project_name.server.api.CoreApi
 import your_name.project_name.server.config.Env
 import your_name.project_name.server.html.Template
