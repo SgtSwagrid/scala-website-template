@@ -1,29 +1,65 @@
-# 🌐 scala-website-template
+<div align="center">
+  <h1>🌐 Scala Website Template</h1>
+  <p>A reusable template for full stack websites developed in Scala, with build config and essential libraries.</p>
+</div>
 
-A reusable template for full stack websites developed in Scala, with build config and essential libraries.
-
-### Disclaimer
+## ❗ Disclaimer
 
 This template is opinionated, with many pre-made decisions about which tooling, code style, and workflow to use.
 If you don't like that, don't use a template.
+
+### Rationale
 
 The primary goal of this template is to provide a starting point for people who want to build a full stack website in Scala,
 but don't want to spend time setting up the build config and picking out libraries.
 The reference point for decisions made herein are my own projects and preferences.
 
+### Platform support
+
 Furthermore, this template has only been tested on Windows 11.
 Other operating systems will likely work, but don't be surprised if platform-specific adjustments are necessary.
 In case you find yourself having to make adjustments, please consider contributing those adjustments back to the template.
 
-### Using this template
+## 🔨 How to use this template
 
-To use this template, click the "Use this template" button at the top of the repository page on GitHub, and follow the instructions to create a new repository.
+### 1. Create your repository
+
+Click '[**Use this template**](https://github.com/new?template_name=scala-website-template&template_owner=SgtSwagrid)' on GitHub, and follow the instructions to create a new repository for your library.
+All files herein will be copied as-is.
+
+### 2. Configure [build.sbt](build.sbt)
+
 You'll need to set the `name`, `organization`, and `version` fields in [build.sbt](./build.sbt) and `projectRoot` in [Subprojects.scala](./project/Subprojects.scala).
 You may also wish to set the `GH_TOKEN` local environment variable _and_ GitHub repository secret (see [Environment Variables](#environment-variables)) to help with agentic and CI workflows.
+
 Thereafter, the template should work out-of-the-box, and you can start building your website immediately.
 If you haven't already, you may also want to read the documentation on [Laminar](https://laminar.dev/).
 
-## Requirements
+## 👮‍♂️ License
+
+The included MIT license should be considered only as part of the template, and is not binding.
+This repository is hereby released to the public domain, to be used freely.
+In particular, and contra [`LICENSE.md`](LICENSE.md), you may remove the license text from copies.
+
+## 🤝 Contributing
+
+[`CONTRIBUTING.md`](CONTRIBUTING.md) is also part of the template, and does not _necessarily_ apply to contributions to the template itself.
+The most important thing to know is that many of the configuration files are automatically synced from [`scala-config`](https://github.com/SgtSwagrid/scala-config), and should be updated there rather than here.
+
+## 👁️ See also
+
+Check out [`scala-library-template`](https://github.com/SgtSwagrid/scala-library-template) for a similar template to quickly start a new Scala library.
+
+<br/><br/><br/><br/>
+<h3 align="center">⬆️ Delete • Keep ⬇️</h3>
+<br/><br/><br/><br/>
+
+<div align="center">
+  <h1>✨ My Website</h1>
+  <p>A very cool website that does something great.</p>
+</div>
+
+## 🚧 Requirements
 
 In order to locally run or work on this project, you'll need to have the following installed:
 
@@ -36,7 +72,7 @@ In order to locally run or work on this project, you'll need to have the followi
 *Installing Scala separately isn't strictly required, as the correct version (currently [3.8.2](https://www.scala-lang.org/download/3.8.2.html)) will be fetched by sbt in the build process.
 However, it may still be helpful for testing.
 
-## Installation
+## ⬇️ Installation
 
 ### Clone the repository
 ```bash
@@ -44,7 +80,7 @@ git clone https://github.com/SgtSwagrid/scala-website-template.git
 cd scala-website-template
 ```
 
-## Local Development
+## 💻 Local development
 
 The following commands are defined in [Commands.scala](./project/Commands.scala):
 
@@ -69,7 +105,7 @@ sbt lint
 - Linting is also automatically applied when submitting a PR.
 - Alternatively use `sbt lint-check` to check for violations _without_ automatically fixing them.
 
-## Environment Variables
+## ⚙️ Environment variables
 
 The following environment variables can be set to configure your local instance:
 
@@ -77,7 +113,7 @@ The following environment variables can be set to configure your local instance:
 - `HOST` - the [address](https://en.wikipedia.org/wiki/Hostname) on which the development server listens for requests (default: `localhost`).
 - `PORT` - the [port](https://en.wikipedia.org/wiki/Port_(computer_networking)) on which the development server listens for requests (default: `8080`).
 
-## Recommended Tooling
+## 🛠️ Recommended tooling
 
 While it isn't mandatory, use of the following tooling is advised:
 
@@ -86,7 +122,7 @@ While it isn't mandatory, use of the following tooling is advised:
 
 Shared configuration for the above is checked into the repository for a seamless experience.
 
-## Architecture
+## 🏗️ Architecture
 
 The codebase is partitioned into three subprojects.
 All subprojects are written in [Scala](https://www.scala-lang.org/), but they are compiled in different ways.
@@ -115,9 +151,9 @@ Build configurations for the subprojects can be found in [Subprojects.scala](./p
 * Used for defining common data types, algorithms, or communication protocols that are (or in principle could be) used by either.
 * Avoids source duplication: one implementation is enough.
 
-## Dependencies
+## 📋 Dependencies
 
-The following open-source technologies are used. You do not need to install these manually, as they are managed by sbt.
+The following open-source libraries are used. You do not need to install these manually, as they are managed by sbt.
 Dependencies are defined in [Subprojects.scala](./project/Dependencies.scala).
 
 - **[scalafmt](https://scalameta.org/scalafmt/)** - a code formatter to ensure a consistent style (configured by [.scalafmt.conf](https://github.com/SgtSwagrid/fairmap/blob/main/.scalafmt.conf)).
@@ -131,7 +167,3 @@ Dependencies are defined in [Subprojects.scala](./project/Dependencies.scala).
 - **[Airstream](https://github.com/raquo/airstream)** - a [functional reactive programming](https://en.wikipedia.org/wiki/Functional_reactive_programming) library (required by Laminar).
 - **[Circe](https://circe.github.io/circe/)** - automatic serialisation/deserialisation to/from [JSON](https://www.json.org/json-en.html) (for client-server communication).
 - **[Cats](https://typelevel.org/cats/)** - provides abstractions for functional programming (alongside [Cats Effect 3](https://typelevel.org/cats-effect/) and others).
-
-## See also
-
-Check out [scala-library-template](https://github.com/SgtSwagrid/scala-library-template) for a similar template to quickly publish a library in Scala.
