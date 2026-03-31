@@ -21,7 +21,7 @@ object Dependencies {
     val catsMtl         = "1.6.0"
     val catsCollections = "0.9.10"
     val munit           = "1.0.3"
-    val munitCatsEffect = "2.0.0"
+    val munitCatsEffect = "2.2.0"
   }
 
   /**
@@ -57,8 +57,10 @@ object Dependencies {
   )
 
   /** Library dependencies associated with FS2, for stream processing. */
-  lazy val fs2 = libraryDependencies ++=
-    Seq("co.fs2" %% "fs2-core" % V.fs2, "co.fs2" %% "fs2-io" % V.fs2)
+  lazy val fs2 = libraryDependencies ++= Seq(
+    "co.fs2" %% "fs2-core" % V.fs2,
+    "co.fs2" %% "fs2-io"   % V.fs2,
+  )
 
   /** Library dependencies associated with Scala.js, for JS interop. */
   lazy val scalajs = libraryDependencies ++=
