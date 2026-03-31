@@ -6,7 +6,10 @@ import sbt.io.Path
 /** Tasks for copying Scala.js output and client resources into server assets. */
 object Assets {
 
-  /** Task for copying the (unoptimised) compiled client into the server's build. */
+  /**
+    * Task for copying the (unoptimised) compiled client into the server's
+    * build.
+    */
   val copyFastJsTask = Def.task {
     (Subprojects.client / Compile / fastLinkJS).value
     copyFiles(
@@ -52,11 +55,11 @@ object Assets {
     taskKey[Set[File]]("Copy client resources into server assets.")
 
   /**
-   * Task for copying Scala source files alongside the compiled JS output so
-   * that the browser can fetch them when resolving source maps in dev mode.
-   * Sources are placed under `assets/scripts/` to match the relative paths
-   * embedded in the source map (which are relativised to the project root).
-   */
+    * Task for copying Scala source files alongside the compiled JS output so
+    * that the browser can fetch them when resolving source maps in dev mode.
+    * Sources are placed under `assets/scripts/` to match the relative paths
+    * embedded in the source map (which are relativised to the project root).
+    */
   val copySourcesTask = Def.task {
     val base = (ThisBuild / baseDirectory).value
     val dest = (Compile / resourceManaged).value / "assets" / "scripts"
@@ -77,10 +80,10 @@ object Assets {
   )
 
   /**
-   * Task for deleting any Scala source files that may have been copied into the
-   * server's managed assets during a prior dev build. This ensures that source
-   * files are never included in a production build.
-   */
+    * Task for deleting any Scala source files that may have been copied into
+    * the server's managed assets during a prior dev build. This ensures that
+    * source files are never included in a production build.
+    */
   val deleteSourcesTask = Def.task {
     val dest = (Compile / resourceManaged).value / "assets" / "scripts"
     IO.delete(dest / "client")
@@ -88,23 +91,23 @@ object Assets {
   }
 
   /**
-   * Copy files from one directory to another, only copying files that have
-   * changed.
-   *
-   * @param from
-   *   The directory to copy files from. All files in this directory and its
-   *   subdirectories will be copied.
-   *
-   * @param to
-   *   The directory to copy files to. The directory structure of the source
-   *   will be preserved in the destination.
-   *
-   * @param cache
-   *   A directory to use for caching file hashes, so that only changed files
-   *   are copied. By convention, a subdirectory of
-   *   `streams.value.cacheDirectory` should be used, although the exact
-   *   location is not important so long as it is consistent and unique.
-   */
+    * Copy files from one directory to another, only copying files that have
+    * changed.
+    *
+    * @param from
+    *   The directory to copy files from. All files in this directory and its
+    *   subdirectories will be copied.
+    *
+    * @param to
+    *   The directory to copy files to. The directory structure of the source
+    *   will be preserved in the destination.
+    *
+    * @param cache
+    *   A directory to use for caching file hashes, so that only changed files
+    *   are copied. By convention, a subdirectory of
+    *   `streams.value.cacheDirectory` should be used, although the exact
+    *   location is not important so long as it is consistent and unique.
+    */
   def copyFiles(from: File, to: File, cache: File): Set[File] = {
 
     // The collection of files to copy.

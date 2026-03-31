@@ -53,7 +53,10 @@ object IdeSettings extends AutoPlugin {
 
   override lazy val globalSettings = Seq(
     // Prevent a warning about unknown settings when running in a non-IDE context:
-    excludeLintKeys ++=
-      Set(idePackagePrefix, ideBasePackages, ideExcludedDirectories),
+    excludeLintKeys ++= Set(
+      idePackagePrefix,
+      ideBasePackages,
+      ideExcludedDirectories,
+    ),
   )
 }
