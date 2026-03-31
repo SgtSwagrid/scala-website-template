@@ -64,8 +64,15 @@ Check out [`scala-library-template`](https://github.com/SgtSwagrid/scala-library
 <br/><br/><br/><br/>
 
 <div align="center">
+  
   <h1>✨ My Website</h1>
   <p>A very cool website that does something great.</p>
+
+  <!-- Update the following URLS to show live build status in your README. -->
+  <span>
+    <a href="https://github.com/SgtSwagrid/scala-website-template/actions/workflows/ci.yml"><img src="https://github.com/SgtSwagrid/scala-website-template/actions/workflows/ci.yml/badge.svg" alt="Build status" /></a>
+  </span>
+  
 </div>
 
 ## 🚧 Requirements
