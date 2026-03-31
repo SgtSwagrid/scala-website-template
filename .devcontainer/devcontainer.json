@@ -1,5 +1,5 @@
 {
-  "name": "Scala Colours",
+  "name": "Scala Project",
   "build": {
     "dockerfile": "Dockerfile"
   },

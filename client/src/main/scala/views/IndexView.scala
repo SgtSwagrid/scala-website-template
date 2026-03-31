@@ -8,5 +8,8 @@ import scala.scalajs.js.annotation.JSExportTopLevel
 @JSExportTopLevel("IndexView")
 object IndexView extends View:
 
-  override protected def content =
-    h1("Hello, World!", fontSize("32px"), textAlign.center)
+  override protected def content = h1(
+    "Hello, World!",
+    fontSize("32px"),
+    textAlign.center,
+  )
