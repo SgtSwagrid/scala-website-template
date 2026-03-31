@@ -7,7 +7,7 @@ object Dependencies {
 
   /** The version to use for each dependency. */
   lazy val V = new {
-    val tapir           = "1.13.13"
+    val tapir           = "1.13.14"
     val slf4j           = "2.0.17"
     val logback         = "1.5.32"
     val fs2             = "3.13.0"

@@ -4,13 +4,13 @@
 addSbtPlugin("org.scala-js" % "sbt-scalajs" % "1.20.2")
 
 // For cross-compilation into JVM/JS from the same subproject.
-addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "1.2.0")
+addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "1.3.2")
 
 // For hot reloading.
 addSbtPlugin("io.spray" % "sbt-revolver" % "0.10.0")
 
 // For IntelliJ integration.
-addSbtPlugin("org.jetbrains.scala" % "sbt-ide-settings" % "1.1.2")
+addSbtPlugin("org.jetbrains.scala" % "sbt-ide-settings" % "1.1.4")
 
 // For automatic code reformatting.
 addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.5.6")
