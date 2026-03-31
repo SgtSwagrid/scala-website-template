@@ -24,7 +24,7 @@ In case you find yourself having to make adjustments, please consider contributi
 
 ### 1. Create your repository
 
-Click '[**Use this template**](https://github.com/new?template_name=scala-website-template&template_owner=SgtSwagrid)' on GitHub, and follow the instructions to create a new repository for your library.
+Click '[**Use this template**](https://github.com/new?template_name=scala-website-template&template_owner=SgtSwagrid)' on GitHub, and follow the instructions to create a new repository for your website.
 All files herein will be copied as-is.
 
 ### 2. Configure [build.sbt](build.sbt)
