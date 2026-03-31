@@ -7,7 +7,7 @@ object Dependencies {
 
   /** The version to use for each dependency. */
   lazy val V = new {
-    val tapir           = "1.13.13"
+    val tapir           = "1.13.14"
     val slf4j           = "2.0.17"
     val logback         = "1.5.32"
     val fs2             = "3.13.0"
@@ -57,8 +57,10 @@ object Dependencies {
   )
 
   /** Library dependencies associated with FS2, for stream processing. */
-  lazy val fs2 = libraryDependencies ++=
-    Seq("co.fs2" %% "fs2-core" % V.fs2, "co.fs2" %% "fs2-io" % V.fs2)
+  lazy val fs2 = libraryDependencies ++= Seq(
+    "co.fs2" %% "fs2-core" % V.fs2,
+    "co.fs2" %% "fs2-io"   % V.fs2,
+  )
 
   /** Library dependencies associated with Scala.js, for JS interop. */
   lazy val scalajs = libraryDependencies ++=
