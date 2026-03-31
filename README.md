@@ -30,7 +30,16 @@ All files herein will be copied as-is.
 ### 2. Configure [build.sbt](build.sbt)
 
 You'll need to set the `name`, `organization`, and `version` fields in [build.sbt](./build.sbt) and `projectRoot` in [Subprojects.scala](./project/Subprojects.scala).
+
+### 3. Add repository secrets
+
 You may also wish to set the `GH_TOKEN` local environment variable _and_ GitHub repository secret (see [Environment Variables](#environment-variables)) to help with agentic and CI workflows.
+
+Secrets can be added from the GitHub web interface by nagivating as follows from your repository's page:
+
+> **Settings → Secrets and variables → Actions**
+
+### Done!
 
 Thereafter, the template should work out-of-the-box, and you can start building your website immediately.
 If you haven't already, you may also want to read the documentation on [Laminar](https://laminar.dev/).
