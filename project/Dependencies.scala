@@ -13,7 +13,7 @@ object Dependencies {
     val fs2             = "3.13.0"
     val assetLoader     = "0.1.6"
     val scalajs         = "2.8.0"
-    val laminar         = "17.0.0"
+    val laminar         = "17.2.1"
     val laminext        = "0.17.0"
     val circe           = "0.14.15"
     val cats            = "2.13.0"
@@ -57,8 +57,10 @@ object Dependencies {
   )
 
   /** Library dependencies associated with FS2, for stream processing. */
-  lazy val fs2 = libraryDependencies ++=
-    Seq("co.fs2" %% "fs2-core" % V.fs2, "co.fs2" %% "fs2-io" % V.fs2)
+  lazy val fs2 = libraryDependencies ++= Seq(
+    "co.fs2" %% "fs2-core" % V.fs2,
+    "co.fs2" %% "fs2-io"   % V.fs2,
+  )
 
   /** Library dependencies associated with Scala.js, for JS interop. */
   lazy val scalajs = libraryDependencies ++=
