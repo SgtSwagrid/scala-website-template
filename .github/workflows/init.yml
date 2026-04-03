@@ -16,22 +16,21 @@ on:
 jobs:
 
   init:
-    name: Initialise Repository
     runs-on: ubuntu-latest
 
     steps:
 
-      - name: Ensure GH_TOKEN is set
-        id: check-gh-token
+      - name: Check requirements
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           if [ -z "$GH_TOKEN" ]; then
-            echo "::error::GH_TOKEN secret is not set. Create a GitHub Personal Access Token and add it as a repository secret named GH_TOKEN."
+            echo "::error::GH_TOKEN secret is not set." \
+              "Create a GitHub Personal Access Token with sufficient access" \
+              "and add it as a repository secret named GH_TOKEN."
             exit 1
           fi
 
-      # Configures repository settings that cannot be set via static config files.
       - name: Configure repository settings
         id: configure
         env:
