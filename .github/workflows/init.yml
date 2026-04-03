@@ -1,10 +1,8 @@
-# One-time repository initialisation: applies settings and creates branch protection
-# rulesets that cannot be defined in static config files. Safe to re-run.
-#
-# Requirements:
-#   - A GitHub Personal Access Token (PAT) with admin scope must be stored as the
-#     `GH_TOKEN` repository secret. Admin access is required to manage rulesets and
-#     repository settings, which exceed GITHUB_TOKEN's maximum permissions.
+# =================================================================================================
+# One-time repository initialisation.
+# Applies settings that cannot be defined in static config files.
+# Safe to re-run.
+# =================================================================================================
 
 name: Initialisation
 
@@ -19,7 +17,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
       - name: Check requirements
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
