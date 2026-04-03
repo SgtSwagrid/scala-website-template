@@ -31,10 +31,6 @@ jobs:
             exit 1
           fi
 
-      - name: Checkout code
-        id: checkout
-        uses: actions/checkout@v4
-
       # Configures repository settings that cannot be set via static config files.
       - name: Configure repository settings
         id: configure
@@ -49,27 +45,3 @@ jobs:
           gh api "repos/${{ github.repository }}/actions/permissions/workflow" --method PUT \
             --field default_workflow_permissions=write \
             --field can_approve_pull_request_reviews=true
-
-      # Applies all ruleset definitions from .github/rulesets/. Strips non-API
-      # fields before posting, and skips any ruleset that already exists.
-      - name: Apply rulesets
-        id: apply-rulesets
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: |
-          for file in .github/rulesets/*.json; do
-            RULESET_NAME=$(jq -r '.name' "$file")
-
-            EXISTING_ID=$(gh api "repos/${{ github.repository }}/rulesets" \
-              --jq ".[] | select(.name == \"$RULESET_NAME\") | .id" 2>/dev/null || true)
-
-            if [ -n "$EXISTING_ID" ]; then
-              echo "Ruleset '$RULESET_NAME' already exists. Skipping."
-              continue
-            fi
-
-            jq 'del(._comment)' "$file" \
-              | gh api "repos/${{ github.repository }}/rulesets" --method POST --input -
-
-            echo "Ruleset '$RULESET_NAME' created successfully."
-          done
