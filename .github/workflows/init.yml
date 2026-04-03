@@ -31,7 +31,7 @@ jobs:
             exit 1
           fi
 
-      - name: Configure repository settings
+      - name: Configure settings
         id: configure
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
