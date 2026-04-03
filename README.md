@@ -76,7 +76,7 @@ Check out [`scala-library-template`](https://github.com/SgtSwagrid/scala-library
 
   <!-- Update the following URLS to show live build status in your README. -->
   <span>
-    <a href="https://github.com/SgtSwagrid/scala-website-template/actions/workflows/ci.yml"><img src="https://github.com/SgtSwagrid/scala-website-template/actions/workflows/ci.yml/badge.svg" alt="Build status" /></a>
+    <a href="https://github.com/SgtSwagrid/scala-website-template/actions/workflows/ci.yml"><img src="https://github.com/SgtSwagrid/scala-website-template/actions/workflows/build-integrity.yml/badge.svg" alt="Build status" /></a>
   </span>
   
 </div>
