@@ -22,7 +22,7 @@ In case you find yourself having to make adjustments, please consider contributi
 
 ## 📋 What's included?
 
-1. Everything from [`SgtSwagrid/scala-config`](https://github.com/SgtSwagrid/scala-config), including reasonable [Scalafmt](https://scalameta.org/scalafmt/) settings, CI piplines for build integrity, and some IDE config.
+1. Everything from [Scala Config](https://github.com/SgtSwagrid/scala-config), including reasonable [Scalafmt](https://scalameta.org/scalafmt/) settings, CI piplines for build integrity, and some IDE config.
 2. A collection of common libraries that work well together (see [Dependencies](#-dependencies)).
 3. Example build configuration and setup instructions. In particular, this demonstrates how to serve compiled Scala code to the client as a static JavaScript file.
 
@@ -54,16 +54,16 @@ If you haven't already, you may also want to read the documentation on [Laminar]
 
 The included MIT license should be considered only as part of the template, and is not binding.
 This repository is hereby released to the public domain, to be used freely.
-In particular, and contra [`LICENSE.md`](LICENSE.md), you may remove the license text from copies.
+In particular, and contra [LICENSE.md](LICENSE.md), you may remove the license text from copies.
 
 ## 🤝 Contributing
 
-[`CONTRIBUTING.md`](CONTRIBUTING.md) is also part of the template, and does not _necessarily_ apply to contributions to the template itself.
-The most important thing to know is that many of the configuration files are automatically synced from [`scala-config`](https://github.com/SgtSwagrid/scala-config), and should be updated there rather than here.
+[CONTRIBUTING.md](CONTRIBUTING.md) is also part of the template, and does not _necessarily_ apply to contributions to the template itself.
+The most important thing to know is that many of the configuration files are automatically synced from [Scala Config](https://github.com/SgtSwagrid/scala-config), and should be updated there rather than here.
 
 ## 👁️ See also
 
-Check out [`scala-library-template`](https://github.com/SgtSwagrid/scala-library-template) for a similar template to quickly start a new Scala library.
+Check out [Scala Library Template](https://github.com/SgtSwagrid/scala-library-template) for a similar template to quickly start a new Scala library.
 
 <br/><br/><br/><br/>
 <h3 align="center">⬆️ Delete • Keep ⬇️</h3>
