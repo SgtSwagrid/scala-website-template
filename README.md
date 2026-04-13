@@ -63,7 +63,8 @@ The most important thing to know is that many of the configuration files are aut
 
 ## 👁️ See also
 
-Check out [Scala Library Template](https://github.com/SgtSwagrid/scala-library-template) for a similar template to quickly start a new Scala library.
+- Check out [Scala Library Template](https://github.com/SgtSwagrid/scala-library-template) for a similar template to quickly start a new Scala library.
+- This project is configured by [Scala Config](https://github.com/SgtSwagrid/scala-config).
 
 <br/><br/><br/><br/>
 <h3 align="center">⬆️ Delete • Keep ⬇️</h3>
