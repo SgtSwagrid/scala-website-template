@@ -3,7 +3,6 @@
   "allow_merge_commit": false,
   "allow_rebase_merge": false,
   "allow_auto_merge": false,
-  "allow_forking": true,
   "allow_update_branch": true,
   "delete_branch_on_merge": true,
   "web_commit_signoff_required": false,
