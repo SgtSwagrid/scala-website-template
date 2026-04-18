@@ -1,7 +1,7 @@
-package your_name.project_name.server
+package com.alecdorrington.server
 package html
 
-import your_name.project_name.server.config.Env
+import com.alecdorrington.server.config.Env
 
 /**
   * A simple HTML template common to every page of this application. Loads the

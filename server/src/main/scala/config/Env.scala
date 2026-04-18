@@ -1,4 +1,4 @@
-package your_name.project_name.server
+package com.alecdorrington.server
 package config
 
 import java.nio.file.{Path, Paths}

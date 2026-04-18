@@ -1,40 +1,55 @@
-# Contributing
+# 📜 Contribution Guidelines
 
-## Workflow
+This document lays out the basic principles which govern contributions to this project.
 
-1. Clone the repository: `git clone https://github.com/SgtSwagrid/scala-website-template.git`.
-2. Create a feature branch: `git checkout -b feature_<description>`.
-3. Make your changes and format: `sbt lint`
-4. Commit (`git add -A` then `git commit -m "<description>"`) and push (`git push`).
-5. Create a pull request to `main`, with the title formatted as `[<type>][<scope>] <Description>`, e.g. `[fix][render] Solved inverted colours.`
-6. Before merging, the code must pass the build test (defined in [ci.yml](./.github/workflows/ci.yml)).
+## 🛠️ Workflow
 
-## Code Style
+1. Clone the repository: `git clone https://github.com/SgtSwagrid/<repository-name>.git`.
+2. Create a feature branch: `git switch -c feature_<description>`.
+3. Make your changes (use of [IntelliJ IDEA](https://www.jetbrains.com/idea/) is recommended but not required).
+4. Reformat the code according to our style rules: `sbt scalafmtAll`.
+5. Commit (`git add -A` then `git commit -m "<description>"`).
+6. Push your changes, either to this repository directly if you have write access, or to a forked version of it if you don't.
+7. Create a pull request to `main`, with the title given as `[<scope>] <Description>` (e.g. `[rendering] Solved inverted colours.`).
+8. Before merging, the code must pass the build test (defined in [build-integrity.yml](./.github/workflows/build-integrity.yml)).
 
-Code formatting is determined by scalafmt. You shouldn't worry about aligning things in a pretty manner, scalafmt will do this for you.
-The formatting rules can be found in [.scalafmt.conf](./.scalafmt.conf).
-In general, we follow a Scala 3 style with significant indentation.
+## 🎩 Code Style
 
-### Functional Programming
+Please see the [Code Style Guidelines](docs/STYLE_GUIDE.md) for details on our design principles and code style.
+In brief:
+- We adhere to the principles of [functional programming](https://en.wikipedia.org/wiki/Functional_programming).
+- [Scalafmt](https://scalameta.org/scalafmt/) will automatically reformat your code for you with `sbt scalafmtAll`.
 
-In general, this project follows a [functional](https://en.wikipedia.org/wiki/Functional_programming) style. In particular, this means:
-
-- Use of immutable [data structures](https://en.wikipedia.org/wiki/Persistent_data_structure) and variables; state updates are by duplication rather than by mutation.
-- Use of pure functions without [side effects](https://en.wikipedia.org/wiki/Side_effect_(computer_science)), or with _explicit_ side effects where unavoidable.
-- Very consistent and explicit use of [types](https://shekhar14.medium.com/type-theory-and-functional-programming-52f81deb36f1).
-
-When performance constraints necessitate the use of mutable state in a limited context, this is allowed.
-
-### Mathematical Abstractions
-
-When it makes sense to do so, try to hide complexity behind mathematical abstractions with obvious semantics.
-A well-chosen abstraction (like `Vec` or `AffineBijection` or `Signal`) makes the code read like the math it represents.
-
-## Branching Strategy
+## 🌳 Branching Strategy
 
 This project follows simple [trunk-based](https://trunkbaseddevelopment.com/) development.
-All development happens on short-lived feature branches, which are merged into `main` when complete.
+All work happens on short-lived feature branches, which are merged into `main` by pull request.
+Releases are by [tag](https://docs.github.com/en/repositories/releasing-projects-on-github/viewing-your-repositorys-releases-and-tags),
+and there are no separate release branches.
 
-## Contact
+## 🤖 LLM Agent Usage
 
-Created by [Alec Dorrington](https://github.com/SgtSwagrid). For questions or issues, please use the GitHub issue tracker.
+The use of agents where it makes sense is allowed and encouraged.
+In particular, this project is configured for optimal interoperability with [Claude Code](https://claude.com/product/claude-code).
+You are however free to use whichever tooling you wish.
+
+### Responsibility
+
+You are still responsible for code that was written or partially written by an LLM.
+You should always read and understand all changes before submitting them.
+
+Generally, the reviewer doesn't need to know which code was generated or manually created.
+Such a distinction would undermine any sense of responsibility: all of the code belongs to you.
+An exception exists when an LLM was used to perform a menial transformation en masse,
+in which case you might consider isolating such changes to a stand-alone commit, and sharing the prompt.
+
+## 📞 Contact
+
+Created by [Alec Dorrington](https://github.com/SgtSwagrid).
+For questions or issues, please use the GitHub issue tracker.
+
+## 🔁 Origin
+
+The primary source of truth for this document can be found in the [Scala Config](https://github.com/SgtSwagrid/scala-config) repository,
+from which it is automatically synchronised with [Github Graph](https://github.com/SgtSwagrid/github-graph).
+This should be updated there rather than here, lest any changes be subsequently reverted.

@@ -31,46 +31,7 @@ This is a Scala website that provides ...
 
 ### Code Style
 
-#### Structure and design
-
-- Write purely-functional, immutable code without side effects.
-- Never use local / multiple returns; instead, use `if` expressions or pattern matching to return values.
-- Use/implement higher-order functions and combinators (e.g. `map`, `flatMap`, `fold`, etc.) to abstract over common patterns of computation, rather than writing explicit loops or recursion.
-- Actively check for and avoid code duplication, and try to combine things where possible.
-- Removing duplicated code will quite possibly involve rewriting existing functions with a more general interface.
-- Hide complexity behind well-named mathematical abstractions where possible, so that the code reads like the math it represents.
-- Write very short methods (ideally 1-3 lines) that do one thing, and compose them together. If a method is longer than 5 lines, consider breaking it up.
-- Don't change interface semantics (e.g. by converting covariant or contravariant types into invariant ones) without asking, just because it fixes a problem.
-  The user may which to find a different solution that preserves these semantics.
-- Prefer inheritance with `-Ops`-style traits and F-bounded polymorphism, rather than type classes, when possible.
-
-#### Syntax
-
-- Use new Scala 3 syntax in general, including significant indentation (no braces).
-- Use `[X: {A as a, B, C}]` instead of `[X : B : C](using a: A[X])` for context bounds.
-  In cases where the name for a context bound is specified but not used, remove the `as` clause entirely.
-- Never use the `implicit` keyword, always prefer `given` and `using` instead.
-- Format with `sbt scalafmtAll` before committing. In general, match your style to that defined in `.scalafmt.conf`.
-- When in doubt, follow the style of existing code in the repository.
-
-#### Naming conventions
-
-- Use Australian English spelling in comments and variable names.
-- Use `camelCase` for variable and method names.
-- Use `PascalCase` for class, trait, object, and type names, but also for context bound names following `as`.
-- Exceptionally, `lowercase` names are allowed for short-scoped type arguments in type lambdas to avoid shadowing.
-- Use short yet descriptive variable names. For example, `transform: X => Y` in `map` is better than `f: X => Y`, but `x` is better than `x1` and `start` is better than `startIndex`.
-
-#### Comments
-
-- Add Scaladoc comments to all public members (classes, traits, objects, methods, and vals) that are not self-explanatory.
-- All variable/object references in Scaladoc comments should use `[[name]]` links, not backticks.
-- All literals in Scaladoc comments should be wrapped in backticks, e.g. `true`, `0`, etc.
-- Be as concise as possible in comments, while still being clear.
-- Write full sentences, but avoid unnecessary words and repetition.
-- Parameter descriptions (i.e. with `@param`) use definite articles (e.g. "the").
-- Return value descriptions (i.e. with `@return`) use indefinite articles (e.g. "a", "an").
-- Start all sentences with a capital letter and end with a period. This includes `@param` tags, etc.
+- You must read the [Code Style Guidelines](docs/STYLE_GUIDE.md).
 
 ### Pull Requests
 

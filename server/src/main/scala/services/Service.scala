@@ -1,13 +1,13 @@
-package your_name.project_name.server
+package com.alecdorrington.server
 package services
 
 import cats.effect.IO
+import com.alecdorrington.server.config.Env
 import sttp.capabilities.WebSockets
 import sttp.capabilities.fs2.Fs2Streams
 import sttp.tapir.server.ServerEndpoint
 import sttp.tapir.server.metrics.prometheus.PrometheusMetrics
 import sttp.tapir.swagger.bundle.SwaggerInterpreter
-import your_name.project_name.server.config.Env
 
 /**
   * The base trait for all API services in this application. Each service is a

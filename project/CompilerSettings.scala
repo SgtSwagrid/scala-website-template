@@ -16,15 +16,17 @@ object CompilerSettings extends AutoPlugin {
     ),
 
     scalacOptions ++= Seq(
+       // Give more detailed error messages:
+      "-explain",
+      "-explain-types",
+      "-explain-cyclic",
+
       // Enable new experimental features:
       "-language:experimental.subCases",
       "-language:experimental.relaxedLambdaSyntax",
       "-language:experimental.multiSpreads",
       "-language:experimental.strictEqualityPatternMatching",
-
-      // Allow additional function call inlining:
-      "-Xmax-inlines",
-      "64",
+      "-language:experimental.erasedDefinitions",
     ),
 
     // The Scala version used across all subprojects:

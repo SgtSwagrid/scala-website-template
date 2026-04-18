@@ -1,4 +1,4 @@
-// External plugins for SBT:
+// External plugins for SBT.
 
 // For transpilation into JavaScript.
 addSbtPlugin("org.scala-js" % "sbt-scalajs" % "1.21.0")

@@ -1,14 +1,14 @@
-package your_name.project_name.server
+package com.alecdorrington.server
 package api
 
 import cats.effect.IO
+import com.alecdorrington.server.config.Env
 import io.github.sgtswagrid.assetloader.Asset
 import io.github.sgtswagrid.assetloader.tapir.AssetService
 import scala.NamedTuple.DropNames
 import sttp.capabilities.fs2.Fs2Streams
 import sttp.model.StatusCode
 import sttp.tapir.*
-import your_name.project_name.server.config.Env
 
 /** These are general endpoints which are used across the entire application. */
 object CoreApi:
