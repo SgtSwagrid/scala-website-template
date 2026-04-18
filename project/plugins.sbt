@@ -13,7 +13,7 @@ addSbtPlugin("io.spray" % "sbt-revolver" % "0.10.0")
 addSbtPlugin("org.jetbrains.scala" % "sbt-ide-settings" % "1.1.4")
 
 // For automatic code reformatting.
-addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.5.6")
+addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.6.0")
 
 // For packaging the server as a self-contained fat JAR.
 addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "2.3.1")
