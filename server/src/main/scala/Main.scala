@@ -1,10 +1,10 @@
-package your_name.project_name.server
+package com.alecdorrington.server
 
 import cats.effect.{IO, Resource, ResourceApp}
 import cats.syntax.all.*
+import com.alecdorrington.server.config.Env
+import com.alecdorrington.server.services.CoreService
 import sttp.tapir.server.netty.cats.NettyCatsServer
-import your_name.project_name.server.config.Env
-import your_name.project_name.server.services.CoreService
 
 object Main extends ResourceApp.Forever:
 

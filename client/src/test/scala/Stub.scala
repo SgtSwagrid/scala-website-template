@@ -1,4 +1,4 @@
-package your_name.project_name.client
+package com.alecdorrington.client
 
 import munit.CatsEffectSuite
 

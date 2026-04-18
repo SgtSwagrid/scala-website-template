@@ -14,7 +14,7 @@ import spray.revolver.RevolverPlugin.autoImport.*
 object Subprojects {
 
   /** The base package prefix shared across all subprojects. */
-  private val projectRoot = "your_name.project_name"
+  private val projectRoot = "com.alecdorrington"
 
   /** The root subproject encapsulates all other subprojects. */
   lazy val root: Project = project

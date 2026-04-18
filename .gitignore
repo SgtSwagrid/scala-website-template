@@ -24,9 +24,6 @@ metals.sbt
 !.idea/runConfigurations/
 !.idea/externalDependencies.xml
 !.idea/file.template.settings.xml
-!.idea/misc.xml
-!.idea/scala_compiler.xml
-!.idea/scala_settings.xml
 !.idea/vcs.xml
 
 # VSCode (share workspace settings and extensions)

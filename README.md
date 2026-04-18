@@ -190,3 +190,7 @@ Dependencies are defined in [Subprojects.scala](./project/Dependencies.scala).
 - **[Airstream](https://github.com/raquo/airstream)** - a [functional reactive programming](https://en.wikipedia.org/wiki/Functional_reactive_programming) library (required by Laminar).
 - **[Circe](https://circe.github.io/circe/)** - automatic serialisation/deserialisation to/from [JSON](https://www.json.org/json-en.html) (for client-server communication).
 - **[Cats](https://typelevel.org/cats/)** - provides abstractions for functional programming (alongside [Cats Effect 3](https://typelevel.org/cats-effect/) and others).
+
+## 👁️ See also
+
+- This website was made using [Scala Website Template](https://github.com/SgtSwagrid/scala-website-template).
