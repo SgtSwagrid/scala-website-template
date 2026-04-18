@@ -1,0 +1,54 @@
+# Generate and publish Scaladoc to GitHub Pages upon release.
+
+name: Documentation
+
+on:
+  release:
+    types: [ published ]
+  workflow_dispatch:
+
+# Cancel in-progress runs when starting a new one.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+
+  docs:
+    name: Publish Scaladoc
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        id: checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install Java
+        id: install-java
+        uses: actions/setup-java@v4
+        with:
+          java-version: "21"
+          distribution: "temurin"
+          cache: sbt
+
+      - name: Install SBT
+        id: install-sbt
+        uses: sbt/setup-sbt@v1
+
+      - name: Generate Scaladoc
+        id: generate-docs
+        run: |
+          sbt doc
+          echo "docs_dir=$(find target/scala-*/api -maxdepth 0 -type d | head -1)" >> "$GITHUB_ENV"
+
+      - name: Publish to GitHub Pages
+        id: publish-docs
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ${{ env.docs_dir }}
