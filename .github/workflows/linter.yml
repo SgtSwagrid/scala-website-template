@@ -1,0 +1,14 @@
+name: Linter
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  lint:
+    uses: SgtSwagrid/scalafmt-revolver/.github/workflows/linter.yml@main
+    secrets:
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
