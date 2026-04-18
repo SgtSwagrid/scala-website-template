@@ -1,4 +1,4 @@
-package your_name.project_name.common
+package com.alecdorrington.common
 
 class Stub:
   ???
