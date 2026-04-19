@@ -7,7 +7,7 @@ on:
     types: [ published ]
   workflow_dispatch:
 
-    # Cancel in-progress runs when starting a new one.
+# Cancel in-progress runs when starting a new one.
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
