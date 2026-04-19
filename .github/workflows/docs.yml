@@ -7,7 +7,7 @@ on:
     types: [ published ]
   workflow_dispatch:
 
-# Cancel in-progress runs when starting a new one.
+    # Cancel in-progress runs when starting a new one.
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -43,8 +43,8 @@ jobs:
       - name: Generate Scaladoc
         id: generate-docs
         run: |
-          sbt doc
-          echo "docs_dir=$(find target/scala-*/api -maxdepth 0 -type d | head -1)" >> "$GITHUB_ENV"
+          sbt unidoc
+          echo "docs_dir=$(find target/scala-*/unidoc -maxdepth 0 -type d | head -1)" >> "$GITHUB_ENV"
 
       - name: Publish to GitHub Pages
         id: publish-docs
@@ -52,4 +52,4 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ${{ env.docs_dir }}
-          cname: ${{ secrets.CNAME }}
+          publish_branch: docs
