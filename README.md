@@ -3,6 +3,12 @@
   <p>A reusable template for full stack websites in Scala.
 </div>
 
+<br><br>
+
+> "Give me six hours to chop down a tree and I will spend the first four sharpening the axe." — Abraham Lincoln.
+
+<br>
+
 ## ❗ Disclaimer
 
 This template is opinionated, with many pre-made decisions about which tooling, code style, and workflow to use.
