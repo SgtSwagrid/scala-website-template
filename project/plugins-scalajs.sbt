@@ -1,4 +1,4 @@
-// External plugins for SBT.
+// SBT plugins common to all of my Scala.js projects.
 
 // For transpilation into JavaScript.
 addSbtPlugin("org.scala-js" % "sbt-scalajs" % "1.21.0")
@@ -8,12 +8,6 @@ addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "1.3.2")
 
 // For hot reloading.
 addSbtPlugin("io.spray" % "sbt-revolver" % "0.10.0")
-
-// For IntelliJ integration.
-addSbtPlugin("org.jetbrains.scala" % "sbt-ide-settings" % "1.1.4")
-
-// For automatic code reformatting.
-addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.6.0")
 
 // For packaging the server as a self-contained fat JAR.
 addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "2.3.1")
