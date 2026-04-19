@@ -27,6 +27,7 @@ object Subprojects {
       packagePrefix        := projectRoot,
       Compile / run / skip := true,
       run                  := (server / Compile / run).evaluated,
+      ScalaUnidoc / unidoc / scalacOptions ++= Seq("-project", "Scala Website Template"),
     )
 
   /** The server subproject, responsible for persistence and HTTP requests. */
