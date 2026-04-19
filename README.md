@@ -22,7 +22,7 @@ In case you find yourself having to make adjustments, please consider contributi
 
 ## 📋 What's included?
 
-1. Everything from [Scala Config](https://github.com/SgtSwagrid/scala-config), including reasonable [Scalafmt](https://scalameta.org/scalafmt/) settings, CI piplines for build integrity, and some IDE config.
+1. Everything from [Scala Website Config](https://github.com/SgtSwagrid/scala-website0config), including reasonable [Scalafmt](https://scalameta.org/scalafmt/) settings, CI piplines for build integrity, and some IDE config.
 2. A collection of common libraries that work well together (see [Dependencies](#-dependencies)).
 3. Example build configuration and setup instructions. In particular, this demonstrates how to serve compiled Scala code to the client as a static JavaScript file.
 
