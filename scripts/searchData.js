@@ -1,4 +1,4 @@
-pages = [{"l":"index.html#","e":false,"i":"","n":"root","t":"root","d":"","k":"static","x":""},
+pages = [{"l":"index.html#","e":false,"i":"","n":"Scala Website Template","t":"Scala Website Template","d":"","k":"static","x":""},
 {"l":"com/alecdorrington.html#","e":false,"i":"","n":"com.alecdorrington","t":"com.alecdorrington","d":"","k":"package","x":""},
 {"l":"com/alecdorrington/client.html#","e":false,"i":"","n":"com.alecdorrington.client","t":"com.alecdorrington.client","d":"","k":"package","x":""},
 {"l":"com/alecdorrington/client/dev.html#","e":false,"i":"","n":"com.alecdorrington.client.dev","t":"com.alecdorrington.client.dev","d":"","k":"package","x":""},
