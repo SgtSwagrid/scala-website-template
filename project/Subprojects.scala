@@ -9,6 +9,8 @@ import sbtcrossproject.CrossPlugin.autoImport.*
 import sbtcrossproject.CrossProject
 import scalajscrossproject.ScalaJSCrossPlugin.autoImport.*
 import spray.revolver.RevolverPlugin.autoImport.*
+import sbtunidoc.BaseUnidocPlugin.autoImport.*
+import sbtunidoc.ScalaUnidocPlugin
 
 /** The collection of all subprojects that make up this project. */
 object Subprojects {
@@ -19,6 +21,7 @@ object Subprojects {
   /** The root subproject encapsulates all other subprojects. */
   lazy val root: Project = project
     .in(file("."))
+    .enablePlugins(ScalaUnidocPlugin)
     .aggregate(server, client, common.jvm, common.js)
     .settings(
       packagePrefix        := projectRoot,
