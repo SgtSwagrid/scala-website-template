@@ -1,4 +1,5 @@
 // SBT plugins common to all of my Scala.js projects.
+// Automatically synchronised from 'https://github.com/SgtSwagrid/scala-website-config/'.
 
 // For transpilation into JavaScript.
 addSbtPlugin("org.scala-js" % "sbt-scalajs" % "1.21.0")
