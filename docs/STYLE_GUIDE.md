@@ -42,6 +42,8 @@ or else the CI pipeline won't allow it to be merged.
 - Avoid qualified names unless you have good reason to use them. Instead of `algebra.Monoid`, use `import algebra.Monoid` and just write `Monoid`.
   - Exception 1: For when the name is unclear without the surrounding context.
   - Exception 2: For when multiple in-use libraries have similar sets of names.
+- Always use the `override` keyword when a super method is overridden,
+  regardless of whether the super type provided an implementation.
 - When in doubt, follow the existing style of the codebase.
 
 ### Naming conventions
