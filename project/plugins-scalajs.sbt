@@ -2,7 +2,7 @@
 // Automatically synchronised from 'https://github.com/SgtSwagrid/scala-website-config/'.
 
 // For transpilation into JavaScript.
-addSbtPlugin("org.scala-js" % "sbt-scalajs" % "1.21.0")
+addSbtPlugin("org.scala-js" % "sbt-scalajs" % "1.22.0")
 
 // For cross-compilation into JVM/JS from the same subproject.
 addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "1.3.2")
