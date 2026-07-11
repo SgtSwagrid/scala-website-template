@@ -37,7 +37,7 @@ jobs:
         run: sbt scalafmtCheckAll
 
       - name: Build
-        run: sbt 'set ThisBuild / scalacOptions += "-Werror"' compile
+        run: sbt 'set ThisBuild / scalacOptions += "-Werror"; compile'
 
       - name: Test
         run: sbt test
