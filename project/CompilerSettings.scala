@@ -30,7 +30,7 @@ object CompilerSettings extends AutoPlugin {
     ),
 
     // The Scala version used across all subprojects:
-    ThisBuild / scalaVersion := "3.8.3",
+    ThisBuild / scalaVersion := "3.8.4",
 
     // Automatically reload the server when source changes are detected:
     Global / onChangedBuildSource := ReloadOnSourceChanges,
