@@ -1,8 +1,8 @@
-import sbt._
-import sbt.Keys._
+import sbt.*
+import sbt.Keys.*
 
 /** A collection of custom SBT commands. */
-object Commands extends AutoPlugin {
+object Commands extends AutoPlugin:
 
   override def trigger = allRequirements
 
@@ -31,4 +31,3 @@ object Commands extends AutoPlugin {
     commands +=
       Command.command("lint-check")(state => "scalafmtCheckAll" :: state),
   )
-}

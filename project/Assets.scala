@@ -1,10 +1,10 @@
-import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport._
-import sbt._
-import sbt.Keys._
+import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport.*
+import sbt.{*, given}
+import sbt.Keys.*
 import sbt.io.Path
 
 /** Tasks for copying Scala.js output and client resources into server assets. */
-object Assets {
+object Assets:
 
   /**
     * Task for copying the (unoptimised) compiled client into the server's
@@ -108,10 +108,10 @@ object Assets {
     *   `streams.value.cacheDirectory` should be used, although the exact
     *   location is not important so long as it is consistent and unique.
     */
-  def copyFiles(from: File, to: File, cache: File): Set[File] = {
+  def copyFiles(from: File, to: File, cache: File): Set[File] =
 
     // The collection of files to copy.
-    val files = (from ** "*").get.filter(_.isFile).toSet
+    val files = (from ** "*").get().filter(_.isFile).toSet
 
     // Only copy files that haven't changed.
     FileFunction.cached(cache, FilesInfo.hash) { files =>
@@ -128,5 +128,3 @@ object Assets {
       IO.copy(pairs)
       copies
     }(files)
-  }
-}

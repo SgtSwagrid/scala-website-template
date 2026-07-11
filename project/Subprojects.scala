@@ -2,16 +2,14 @@ import Assets.*
 import IdeSettings.packagePrefix
 import org.scalajs.sbtplugin.ScalaJSPlugin
 import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport.*
-import sbt.*
+import sbt.{*, given}
 import sbt.Keys.*
 import sbtassembly.AssemblyPlugin.autoImport.*
-import sbtcrossproject.CrossPlugin.autoImport.*
-import sbtcrossproject.CrossProject
-import scalajscrossproject.ScalaJSCrossPlugin.autoImport.*
+import spray.revolver.RevolverCorePlugin.autoImport.*
 import spray.revolver.RevolverPlugin.autoImport.*
 
 /** The collection of all subprojects that make up this project. */
-object Subprojects {
+object Subprojects:
 
   /** The base package prefix shared across all subprojects. */
   private val projectRoot = "com.alecdorrington"
@@ -19,7 +17,7 @@ object Subprojects {
   /** The server subproject, responsible for persistence and HTTP requests. */
   lazy val server: Project = project
     .in(file("server"))
-    .dependsOn(client, common.jvm)
+    .dependsOn(client, commonJvm)
     .settings(
       name                 := s"${ (ThisBuild / name).value }-server",
       packagePrefix        := s"$projectRoot.server",
@@ -37,7 +35,7 @@ object Subprojects {
       Dependencies.munitCatsEffect,
 
       // Fat JAR assembly settings (used by `sbt assemble`):
-      assembly / assemblyOutputPath    := file("app.jar"),
+      assembly / assemblyOutputPath    := Def.uncached(file("app.jar")),
       assembly / assemblyMergeStrategy := {
         case PathList("META-INF", "services", _*) => MergeStrategy.concat
         case PathList("META-INF", _*)             => MergeStrategy.discard
@@ -47,13 +45,13 @@ object Subprojects {
       },
 
       // Copy Scala.js output and client resources into server managed resources:
-      copyFastJsTaskKey := copyFastJsTask.value,
-      copyFullJsTaskKey := {
+      copyFastJsTaskKey := Def.uncached(copyFastJsTask.value),
+      copyFullJsTaskKey := Def.uncached {
         deleteSourcesTask.value
         copyFullJsTask.value
       },
-      copyAssetsTaskKey  := copyAssetsTask.value,
-      copySourcesTaskKey := copySourcesTask.value,
+      copyAssetsTaskKey  := Def.uncached(copyAssetsTask.value),
+      copySourcesTaskKey := Def.uncached(copySourcesTask.value),
 
       Compile / run := (Compile / run).dependsOn(copyAssetsTaskKey).evaluated,
 
@@ -71,20 +69,28 @@ object Subprojects {
 
       // Enable hot reload:
       reStart :=
-        (reStart dependsOn
-          (copyFastJsTaskKey, copyAssetsTaskKey, copySourcesTaskKey)).evaluated,
+        reStart
+          .dependsOn(
+            copyFastJsTaskKey,
+            copyAssetsTaskKey,
+            copySourcesTaskKey,
+          )
+          .evaluated,
       reStart / javaOptions ++= Seq(setProperty("dev.mode", true)),
 
       // Watch for source changes in all subprojects:
-      Compile / watchSources ++= (client / Compile / sources).value,
-      Compile / watchSources ++= (common.jvm / Compile / sources).value,
-      Compile / watchSources ++= (common.js / Compile / sources).value,
+      Compile / watchSources ++=
+        Def.uncached((client / Compile / sources).value),
+      Compile / watchSources ++=
+        Def.uncached((commonJvm / Compile / sources).value),
+      Compile / watchSources ++=
+        Def.uncached((commonJs / Compile / sources).value),
     )
 
   /** The client subproject, responsible for rendering and user input. */
   lazy val client: Project = project
     .in(file("client"))
-    .dependsOn(common.js)
+    .dependsOn(commonJs)
     .enablePlugins(ScalaJSPlugin)
     .settings(
       name          := s"${ (ThisBuild / name).value }-client",
@@ -108,9 +114,11 @@ object Subprojects {
           )),
     )
 
-  /** The common subproject, with code that is shared between client and server. */
-  lazy val common: CrossProject = crossProject(JSPlatform, JVMPlatform)
-    .crossType(CrossType.Pure)
+  /**
+    * The common subproject, with code that is shared between client and server.
+    * Cross-compiled for JVM and JS via sbt's built-in project matrix.
+    */
+  lazy val common: ProjectMatrix = projectMatrix
     .in(file("common"))
     .settings(
       name          := s"${ (ThisBuild / name).value }-common",
@@ -121,6 +129,14 @@ object Subprojects {
       Dependencies.cats,
       Dependencies.munitCatsEffect,
     )
+    .jvmPlatform(scalaVersions = Seq(CompilerSettings.scala3))
+    .jsPlatform(scalaVersions = Seq(CompilerSettings.scala3))
+
+  /** The JVM variant of the common subproject. */
+  lazy val commonJvm: Project = common.jvm(CompilerSettings.scala3)
+
+  /** The JS variant of the common subproject. */
+  lazy val commonJs: Project = common.js(CompilerSettings.scala3)
 
   /**
     * Helper method for setting a Java system property from an SBT setting.
@@ -136,4 +152,3 @@ object Subprojects {
     */
   private def setProperty(key: String, obj: Any): String =
     s"-D$key=${ obj.toString }"
-}

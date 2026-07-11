@@ -13,7 +13,3 @@ trim_trailing_whitespace = true
 [*.{scala,java,kt,sbt,conf,json,md,yml,yaml,htm,html,xml,js,ts,py}]
 indent_style = space
 indent_size  = 2
-
-# Disable IntelliJ formatting for build scripts as they require Scala 2 syntax.
-[project/**.scala]
-ij_formatter_enabled = false
