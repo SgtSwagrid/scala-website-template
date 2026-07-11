@@ -9,7 +9,7 @@ object Dependencies {
   lazy val V = new {
     val tapir           = "1.13.25"
     val slf4j           = "2.0.17"
-    val logback         = "1.5.32"
+    val logback         = "1.5.37"
     val fs2             = "3.13.0"
     val assetLoader     = "0.1.6"
     val scalajs         = "2.8.1"
