@@ -16,7 +16,7 @@ object CompilerSettings extends AutoPlugin {
     ),
 
     scalacOptions ++= Seq(
-       // Give more detailed error messages:
+      // Give more detailed error messages:
       "-explain",
       "-explain-types",
       "-explain-cyclic",

@@ -44,7 +44,7 @@ jobs:
         id: generate-docs
         run: |
           sbt unidoc
-          echo "docs_dir=$(find target/scala-*/unidoc -maxdepth 0 -type d | head -1)" >> "$GITHUB_ENV"
+          echo "docs_dir=$(find target -type d -name unidoc -not -path '*/streams/*' | head -1)" >> "$GITHUB_ENV"
 
       - name: Publish to GitHub Pages
         id: publish-docs
