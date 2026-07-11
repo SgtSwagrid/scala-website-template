@@ -15,7 +15,7 @@ object Dependencies {
     val scalajs         = "2.8.1"
     val laminar         = "17.0.0"
     val laminext        = "0.17.0"
-    val circe           = "0.14.15"
+    val circe           = "0.14.16"
     val cats            = "2.13.0"
     val catsEffect      = "3.7.0"
     val catsMtl         = "1.6.0"
