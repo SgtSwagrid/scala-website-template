@@ -1,11 +1,14 @@
-import sbt._
-import sbt.Keys._
-import sbt.nio.Keys._
+import sbt.*
+import sbt.Keys.*
+import sbt.nio.Keys.*
 
 /** Project-wide Scala and Java compiler flags. */
-object CompilerSettings extends AutoPlugin {
+object CompilerSettings extends AutoPlugin:
 
   override def trigger = allRequirements
+
+  /** The Scala version used across all subprojects. */
+  val scala3 = "3.8.4"
 
   override lazy val buildSettings = Seq(
     javaOptions ++= Seq(
@@ -30,7 +33,7 @@ object CompilerSettings extends AutoPlugin {
     ),
 
     // The Scala version used across all subprojects:
-    ThisBuild / scalaVersion := "3.8.4",
+    ThisBuild / scalaVersion := scala3,
 
     // Automatically reload the server when source changes are detected:
     Global / onChangedBuildSource := ReloadOnSourceChanges,
@@ -41,4 +44,3 @@ object CompilerSettings extends AutoPlugin {
       Some(s"Source changes detected in ${ file.getFileName }. Recompiling...")
     },
   )
-}

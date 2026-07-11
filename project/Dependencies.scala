@@ -1,12 +1,12 @@
-import org.portablescala.sbtplatformdeps.PlatformDepsPlugin.autoImport._
-import sbt._
-import sbt.Keys._
+import sbt.*
+import sbt.Keys.*
 
 /** External library dependencies. */
-object Dependencies {
+object Dependencies:
 
   /** The version to use for each dependency. */
-  lazy val V = new {
+  object V:
+
     val tapir           = "1.13.25"
     val slf4j           = "2.0.17"
     val logback         = "1.5.37"
@@ -22,7 +22,6 @@ object Dependencies {
     val catsCollections = "0.9.10"
     val munit           = "1.0.3"
     val munitCatsEffect = "2.2.0"
-  }
 
   /**
     * Core Tapir dependencies for defining API endpoints. Cross-compiled for
@@ -64,17 +63,17 @@ object Dependencies {
 
   /** Library dependencies associated with Scala.js, for JS interop. */
   lazy val scalajs = libraryDependencies ++=
-    Seq("org.scala-js" %%% "scalajs-dom" % V.scalajs)
+    Seq("org.scala-js" %% "scalajs-dom" % V.scalajs)
 
   /** Library dependencies associated with Laminar, for client-side rendering. */
   lazy val laminar = libraryDependencies ++= Seq(
-    "com.raquo"   %%% "laminar"         % V.laminar,
-    "com.raquo"   %%% "airstream"       % V.laminar,
-    "io.laminext" %%% "core"            % V.laminext,
-    "io.laminext" %%% "fetch"           % V.laminext,
-    "io.laminext" %%% "fetch-circe"     % V.laminext,
-    "io.laminext" %%% "websocket"       % V.laminext,
-    "io.laminext" %%% "websocket-circe" % V.laminext,
+    "com.raquo"   %% "laminar"         % V.laminar,
+    "com.raquo"   %% "airstream"       % V.laminar,
+    "io.laminext" %% "core"            % V.laminext,
+    "io.laminext" %% "fetch"           % V.laminext,
+    "io.laminext" %% "fetch-circe"     % V.laminext,
+    "io.laminext" %% "websocket"       % V.laminext,
+    "io.laminext" %% "websocket-circe" % V.laminext,
   )
 
   /** Library dependencies associated with Circe, for JSON parsing. */
@@ -96,5 +95,4 @@ object Dependencies {
 
   /** Library dependencies for testing with MUnit and Cats Effect. */
   lazy val munitCatsEffect = libraryDependencies ++=
-    Seq("org.typelevel" %%% "munit-cats-effect" % V.munitCatsEffect % Test)
-}
+    Seq("org.typelevel" %% "munit-cats-effect" % V.munitCatsEffect % Test)

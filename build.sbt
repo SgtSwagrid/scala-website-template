@@ -12,7 +12,12 @@ lazy val common = Subprojects.common
 lazy val `scala-website-template`: Project = project
   .in(file("."))
   .enablePlugins(ScalaUnidocPlugin)
-  .aggregate(server, client, common.jvm, common.js)
+  .aggregate(
+    server,
+    client,
+    Subprojects.commonJvm,
+    Subprojects.commonJs,
+  )
   .settings(
     Compile / run / skip := true,
     run                  := (server / Compile / run).evaluated,
