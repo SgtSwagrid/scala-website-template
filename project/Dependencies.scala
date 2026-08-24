@@ -17,7 +17,7 @@ object Dependencies:
     val laminext        = "0.17.0"
     val circe           = "0.14.16"
     val cats            = "2.13.0"
-    val catsEffect      = "3.7.0"
+    val catsEffect      = "3.7.1"
     val catsMtl         = "1.7.0"
     val catsCollections = "0.9.10"
     val munit           = "1.0.3"
