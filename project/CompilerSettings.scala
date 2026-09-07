@@ -8,7 +8,7 @@ object CompilerSettings extends AutoPlugin:
   override def trigger = allRequirements
 
   /** The Scala version used across all subprojects. */
-  val scala3 = "3.8.4"
+  val scala3 = "3.9.0"
 
   override lazy val buildSettings = Seq(
     javaOptions ++= Seq(
