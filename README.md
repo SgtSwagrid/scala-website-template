@@ -186,8 +186,8 @@ Build configurations for the subprojects can be found in [Subprojects.scala](./p
 The following open-source libraries are used. You do not need to install these manually, as they are managed by sbt.
 Dependencies are defined in [Subprojects.scala](./project/Dependencies.scala).
 
-- **[scalafmt](https://scalameta.org/scalafmt/)** - a code formatter to ensure a consistent style (configured by [.scalafmt.conf](https://github.com/SgtSwagrid/fairmap/blob/main/.scalafmt.conf)).
-- **[Tapir 1.13](https://tapir.softwaremill.com/en/latest/)** - a library to define and implement HTTP APIs.
+- **[scalafmt](https://scalameta.org/scalafmt/)** - a code formatter to ensure a consistent style (configured by [.scalafmt.conf](./main/.scalafmt.conf)).
+- **[Tapir 1.13](https://tapir.softwaremill.com/en/latest/)** - a layer to define and implement HTTP APIs.
 - **[Netty](https://netty.io/)** - an asynchronous web server for the JVM (integrated with Tapir, among other [options](https://tapir.softwaremill.com/en/latest/server/overview.html)).
 - **[Swagger](https://swagger.io/)** - a UI for exploring and testing server endpoints (integrated with Tapir, see [localhost:8080/docs](localhost:8080/docs)).
 - **[Prometheus](https://prometheus.io/)** - for metrics and performance monitoring (integrated with Tapir, not yet enabled).
