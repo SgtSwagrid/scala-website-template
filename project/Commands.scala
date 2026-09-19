@@ -15,12 +15,12 @@ object Commands extends AutoPlugin:
 
     // sbt prod : Run a production server.
     commands += Command.command("prod") { state =>
-      "server/moveFullJsTaskKey" :: "server/Compile/run" :: state
+      "server/copyFullJsTaskKey" :: "server/Compile/run" :: state
     },
 
     // sbt assemble : Build a self-contained fat JAR at app.jar.
     commands += Command.command("assemble") { state =>
-      "server/moveFullJsTaskKey" :: "server/copyAssetsTaskKey" ::
+      "server/copyFullJsTaskKey" :: "server/copyAssetsTaskKey" ::
         "server/assembly" :: state
     },
 

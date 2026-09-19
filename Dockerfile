@@ -1,10 +1,21 @@
 # Builds the production server into a small image that runs `app.jar` beside
 # its static assets. See docs/DEPLOYMENT.md for how it reaches a server.
 
+# Every build definition in the repository, and nothing else: the root build
+# and any it includes by reference, wherever they are. Rebuilt on any change,
+# but the layers below are reused while its output stays the same.
+FROM alpine:3 AS definitions
+COPY . /src
+RUN find /src -type f \
+      ! -name '*.sbt' ! -name .sbtopts ! -name .jvmopts ! -path '*/project/*' \
+      -delete
+
+
 FROM eclipse-temurin:21-jdk-jammy AS build
 WORKDIR /build
 
-# Install whichever sbt the build asks for.
+# Install whichever sbt the build asks for. It is run with `--server`, in the
+# foreground, as a server left in the background dies with its layer.
 COPY project/build.properties project/
 RUN apt-get update \
  && apt-get install -y --no-install-recommends curl \
@@ -16,13 +27,12 @@ RUN apt-get update \
 
 # Fetch dependencies from the build definitions alone, so that this layer is
 # reused until a dependency changes rather than on every change to a source.
-COPY build.sbt .jvmopts ./
-COPY project project
-RUN sbt update
+COPY --from=definitions /src ./
+RUN sbt --server update
 
 # Build the fat JAR, and gather it with the assets it serves into `dist`.
 COPY . .
-RUN sbt assemble \
+RUN sbt --server assemble \
  && mkdir dist \
  && mv app.jar dist/ \
  && cp -r "$(find target -type d -path '*/resource_managed/main/assets' | head -1)" dist/assets
