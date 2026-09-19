@@ -1,0 +1,194 @@
+# Build the server into an image and deploy it whenever CI passes on `main`.
+# Deploys nothing until the DEPLOY_HOST variable is set; see docs/DEPLOYMENT.md.
+# Pull requests that change the packaging build and try the image, unpublished.
+
+name: Deploy
+
+on:
+  workflow_run:
+    workflows: [ CI ]
+    types: [ completed ]
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+    paths:
+      - Dockerfile
+      - .dockerignore
+      - deploy/**
+      - .github/workflows/deploy.yml
+      - project/**
+      - "**.sbt"
+  workflow_dispatch:
+
+# Never cancel a deployment halfway; queue the next one behind it instead.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.ref || 'deploy' }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+
+  image:
+    name: Build Image
+    runs-on: ubuntu-latest
+    if: >-
+      github.event_name == 'pull_request' || (vars.DEPLOY_HOST != '' && (
+        github.event_name == 'workflow_dispatch' || (
+          github.event.workflow_run.conclusion == 'success' &&
+          github.event.workflow_run.event == 'push')))
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      image: ${{ steps.name.outputs.image }}
+
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+
+      - name: Name image
+        id: name
+        run: |
+          repository="ghcr.io/${GITHUB_REPOSITORY,,}"
+          echo "repository=$repository" >> "$GITHUB_OUTPUT"
+          echo "image=$repository:$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Build image
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          load: true
+          # Links the package to this repository, whose workflows may then pull it.
+          labels: org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+          tags: |
+            ${{ steps.name.outputs.image }}
+            ${{ steps.name.outputs.repository }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      # Start the image and fetch the page and everything it links to, which
+      # fails if the server can't start or can't find its assets.
+      - name: Try image
+        env:
+          IMAGE: ${{ steps.name.outputs.image }}
+        run: |
+          docker run -d --name trial -p 8080:8080 "$IMAGE"
+          for attempt in $(seq 60); do
+            curl -fsS localhost:8080/health >/dev/null 2>&1 && break
+            sleep 2
+          done
+          status=0
+          curl -fsS localhost:8080/ -o page.html || status=1
+          for path in $(grep -oE '(src|href)="/[^"]*"' page.html | cut -d'"' -f2); do
+            echo "GET $path"
+            curl -fsS "localhost:8080$path" -o /dev/null || status=1
+          done
+          [ $status -eq 0 ] || docker logs trial
+          exit $status
+
+      # Caddy only reads its configuration once it is on the server, and there
+      # a mistake leaves the site down, so check it here for both kinds of
+      # address it may be given.
+      - name: Check Caddyfile
+        run: |
+          for address in :80 example.com; do
+            docker run --rm -e SITE_ADDRESS="$address"               -v "$PWD/deploy/Caddyfile:/etc/caddy/Caddyfile:ro"               caddy:2 caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile
+          done
+
+      - name: Sign in to GitHub Container Registry
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push image
+        if: github.event_name != 'pull_request'
+        run: docker push --all-tags "${{ steps.name.outputs.repository }}"
+
+  deploy:
+    name: Deploy
+    needs: image
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
+    environment:
+      name: production
+      url: ${{ vars.DOMAIN && format('https://{0}', vars.DOMAIN) || format('http://{0}', vars.DEPLOY_HOST) }}
+    env:
+      TARGET: ${{ vars.DEPLOY_USER || 'deploy' }}@${{ vars.DEPLOY_HOST }}
+
+    steps:
+
+      # The repository's name in lower case, in the deploying user's home
+      # directory; compose names its volumes after it (`<name>_data`).
+      - name: Name directory
+        run: |
+          name="${GITHUB_REPOSITORY#*/}"
+          echo "DIRECTORY=${name,,}" >> "$GITHUB_ENV"
+
+      - name: Checkout code
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+
+      - name: Set up SSH
+        env:
+          KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+        run: |
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$KEY" > ~/.ssh/id_ed25519
+          printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/id_ed25519
+
+      - name: Write configuration
+        env:
+          IMAGE: ${{ needs.image.outputs.image }}
+          SITE_ADDRESS: ${{ vars.DOMAIN || ':80' }}
+          APP_ENV: ${{ secrets.APP_ENV }}
+        run: |
+          printf 'IMAGE=%s\nSITE_ADDRESS=%s\n' "$IMAGE" "$SITE_ADDRESS" > deploy/.env
+          printf '%s\n' "$APP_ENV" > deploy/app.env
+          chmod 600 deploy/app.env
+
+      - name: Copy files to server
+        run: |
+          ssh "$TARGET" "mkdir -p $DIRECTORY"
+          scp -p deploy/compose.yml deploy/Caddyfile deploy/.env deploy/app.env "$TARGET:$DIRECTORY/"
+
+      # The job's own token signs the server in just long enough to pull, so
+      # no long-lived credential is left there.
+      - name: Start new version
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ssh "$TARGET" bash -s <<SCRIPT
+            set -euo pipefail
+            cd "$DIRECTORY"
+            trap 'docker logout ghcr.io >/dev/null' EXIT
+            printf '%s' '$TOKEN' | docker login ghcr.io -u '$GITHUB_ACTOR' --password-stdin
+            docker compose pull
+            docker compose up -d --remove-orphans
+            docker image prune -f
+          SCRIPT
+
+      - name: Check health
+        env:
+          URL: ${{ vars.DOMAIN && format('https://{0}', vars.DOMAIN) || format('http://{0}', vars.DEPLOY_HOST) }}
+        run: |
+          for attempt in $(seq 30); do
+            if curl -fsS "$URL/health"; then exit 0; fi
+            sleep 5
+          done
+          echo "::error::$URL/health did not answer within 150 seconds."
+          ssh "$TARGET" "cd $DIRECTORY && docker compose logs --tail 100"
+          exit 1

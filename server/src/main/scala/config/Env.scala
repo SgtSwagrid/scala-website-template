@@ -10,10 +10,10 @@ import java.nio.file.{Path, Paths}
 object Env:
 
   /** The name of the application. */
-  val NAME: String = jvm("app.name").get
+  val NAME: String = jvm("app.name").getOrElse("app")
 
   /** The version of the application. */
-  val VERSION: String = jvm("app.version").get
+  val VERSION: String = jvm("app.version").getOrElse("unknown")
 
   /** The root directory from which static assets are served. */
   val ASSETS_DIR: Path = jvm("assets.dir").map(Paths.get(_)).get
