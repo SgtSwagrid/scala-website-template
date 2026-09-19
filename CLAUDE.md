@@ -13,6 +13,16 @@ Keep it concise and actionable.
 
 This is a Scala website that provides ...
 
+### Deployment
+
+See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md). `.github/workflows/deploy.yml` builds the `Dockerfile`
+after CI passes on `main`, pushes it to GHCR and runs `deploy/compose.yml` (the app behind Caddy) on
+the server named by the `DEPLOY_HOST` variable over SSH; pull requests touching packaging only build
+and try the image. The fat JAR does not contain its assets: the image copies the server's
+`resource_managed/main/assets` beside it and passes `-Dassets.dir`. Serve the site from a host of
+its own, never a sub-path, as every URL is absolute. Anything the server reads from its environment
+is supplied through the `APP_ENV` secret, never baked into the image.
+
 ## Instructions
 
 ### Compilation and Diagnostics

@@ -1,0 +1,36 @@
+# The production stack: the application behind Caddy, which terminates HTTPS.
+# The deploy workflow copies this directory to the server beside two files it
+# writes itself: `.env` (IMAGE and SITE_ADDRESS) and `app.env` (the APP_ENV
+# secret, handed to the application as environment variables).
+
+services:
+
+  app:
+    image: ${IMAGE:?IMAGE must name the image to run}
+    restart: unless-stopped
+    env_file: app.env
+    volumes:
+      - data:/app/data
+
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    depends_on:
+      - app
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      SITE_ADDRESS: ${SITE_ADDRESS:-:80}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+
+volumes:
+  # The embedded database. Survives every redeploy; back it up.
+  data:
+  # Caddy's certificates, kept so that redeploys don't request new ones.
+  caddy-data:
+  caddy-config:

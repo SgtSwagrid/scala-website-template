@@ -135,6 +135,11 @@ sbt lint
 - Linting is also automatically applied when submitting a PR.
 - Alternatively use `sbt lint-check` to check for violations _without_ automatically fixing them.
 
+## 🚀 Deployment
+
+Every push to `main` that passes CI is built into a Docker image and deployed to a server of your own, behind [Caddy](https://caddyserver.com/) for HTTPS.
+See [DEPLOYMENT.md](./docs/DEPLOYMENT.md) to set one up. Until then, the workflow skips deployment.
+
 ## ⚙️ Environment variables
 
 The following environment variables can be set to configure your local instance:
