@@ -91,6 +91,15 @@ jobs:
           [ $status -eq 0 ] || docker logs trial
           exit $status
 
+      # Caddy only reads its configuration once it is on the server, and there
+      # a mistake leaves the site down, so check it here for both kinds of
+      # address it may be given.
+      - name: Check Caddyfile
+        run: |
+          for address in :80 example.com; do
+            docker run --rm -e SITE_ADDRESS="$address"               -v "$PWD/deploy/Caddyfile:/etc/caddy/Caddyfile:ro"               caddy:2 caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile
+          done
+
       - name: Sign in to GitHub Container Registry
         if: github.event_name != 'pull_request'
         uses: docker/login-action@v3
