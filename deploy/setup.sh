@@ -56,7 +56,7 @@ Secrets:
 $(cat "$key")
 
   DEPLOY_KNOWN_HOSTS =
-$(ssh-keyscan -q localhost 2>/dev/null | sed "s/^localhost/$host/")
+$(awk -v host="$host" '{ print host, $1, $2 }' /etc/ssh/ssh_host_*_key.pub)
 
   APP_ENV = (optional) the application's environment, one NAME=value per line
 
