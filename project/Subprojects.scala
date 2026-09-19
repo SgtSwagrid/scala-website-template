@@ -5,6 +5,7 @@ import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport.*
 import sbt.{*, given}
 import sbt.Keys.*
 import sbtassembly.AssemblyPlugin.autoImport.*
+import scala.language.implicitConversions
 import spray.revolver.RevolverCorePlugin.autoImport.*
 import spray.revolver.RevolverPlugin.autoImport.*
 

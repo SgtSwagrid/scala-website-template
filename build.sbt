@@ -1,5 +1,6 @@
 import sbtunidoc.BaseUnidocPlugin.autoImport.*
 import sbtunidoc.ScalaUnidocPlugin
+import scala.language.implicitConversions
 
 ThisBuild / name         := "project-name"
 ThisBuild / organization := "com.alecdorrington"

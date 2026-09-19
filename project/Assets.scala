@@ -2,6 +2,7 @@ import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport.*
 import sbt.{*, given}
 import sbt.Keys.*
 import sbt.io.Path
+import scala.language.implicitConversions
 
 /** Tasks for copying Scala.js output and client resources into server assets. */
 object Assets:
