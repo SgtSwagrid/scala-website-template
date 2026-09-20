@@ -1,0 +1,28 @@
+# One site's entry in the shared front door, rendered by the deploy workflow and
+# installed into the proxy's `sites/` directory. `${SITE_ADDRESS}` becomes the
+# site's domain, or `:80` where it has none, and `${SITE_NAME}` the name this
+# application answers to on the `web` network.
+#
+# Each application owns exactly this file and no other. Nothing here is shared,
+# so two applications on one server never edit the same configuration, and a
+# mistake in one is refused by `caddy reload` without disturbing the other.
+
+${SITE_ADDRESS} {
+
+	# Compress static content only: responses streamed as text/plain arrive
+	# piece by piece, and must not wait on a compressor's buffer.
+	encode {
+		match {
+			header Content-Type text/html*
+			header Content-Type text/css*
+			header Content-Type text/javascript*
+			header Content-Type application/javascript*
+			header Content-Type application/json*
+			header Content-Type image/svg+xml*
+		}
+	}
+
+	reverse_proxy ${SITE_NAME}:8080 {
+		flush_interval -1
+	}
+}

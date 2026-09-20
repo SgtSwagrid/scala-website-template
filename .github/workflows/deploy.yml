@@ -30,11 +30,13 @@ jobs:
   image:
     name: Build Image
     runs-on: ubuntu-latest
+    # The configuration repositories hold these files only to pass them on.
     if: >-
-      github.event_name == 'pull_request' || (vars.DEPLOY_HOST != '' && (
+      (github.event_name == 'pull_request' || (vars.DEPLOY_HOST != '' && (
         github.event_name == 'workflow_dispatch' || (
           github.event.workflow_run.conclusion == 'success' &&
-          github.event.workflow_run.event == 'push')))
+          github.event.workflow_run.event == 'push')))) &&
+      !endsWith(github.event.repository.name, '-config')
     permissions:
       contents: read
       packages: write
@@ -97,7 +99,10 @@ jobs:
       - name: Check Caddyfile
         run: |
           for address in :80 example.com; do
-            docker run --rm -e SITE_ADDRESS="$address"               -v "$PWD/deploy/Caddyfile:/etc/caddy/Caddyfile:ro"               caddy:2 caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile
+            export SITE_ADDRESS="$address" SITE_NAME=app
+            envsubst '$SITE_ADDRESS $SITE_NAME' < deploy/site.caddy > site.caddy
+            docker run --rm -v "$PWD/site.caddy:/etc/caddy/Caddyfile:ro" \
+              caddy:2 caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile
           done
 
       - name: Sign in to GitHub Container Registry
@@ -156,14 +161,16 @@ jobs:
           SITE_ADDRESS: ${{ vars.DOMAIN || ':80' }}
           APP_ENV: ${{ secrets.APP_ENV }}
         run: |
-          printf 'IMAGE=%s\nSITE_ADDRESS=%s\n' "$IMAGE" "$SITE_ADDRESS" > deploy/.env
+          printf 'IMAGE=%s\nSITE_ADDRESS=%s\nSITE_NAME=%s\n' "$IMAGE" "$SITE_ADDRESS" "$DIRECTORY" > deploy/.env
           printf '%s\n' "$APP_ENV" > deploy/app.env
           chmod 600 deploy/app.env
+          export SITE_ADDRESS SITE_NAME="$DIRECTORY"
+          envsubst '$SITE_ADDRESS $SITE_NAME' < deploy/site.caddy > deploy/site.rendered.caddy
 
       - name: Copy files to server
         run: |
           ssh "$TARGET" "mkdir -p $DIRECTORY"
-          scp -p deploy/compose.yml deploy/Caddyfile deploy/.env deploy/app.env "$TARGET:$DIRECTORY/"
+          scp -p deploy/compose.yml deploy/.env deploy/app.env deploy/site.rendered.caddy "$TARGET:$DIRECTORY/"
 
       # The job's own token signs the server in just long enough to pull, so
       # no long-lived credential is left there.
@@ -179,6 +186,14 @@ jobs:
             docker compose pull
             docker compose up -d --remove-orphans
             docker image prune -f
+
+            # Hand this site to the shared front door, and ask it to read the
+            # new configuration. A site that will not parse is refused, leaving
+            # every site on this server running on the last good configuration,
+            # so a failure here must fail the deployment rather than pass
+            # quietly with the old site still being served.
+            install -m 644 site.rendered.caddy /srv/proxy/sites/$DIRECTORY.caddy
+            docker exec proxy caddy reload --config /etc/caddy/Caddyfile
           SCRIPT
 
       - name: Check health

@@ -1,7 +1,10 @@
-# The production stack: the application behind Caddy, which terminates HTTPS.
+# The production stack: this application alone. HTTPS is terminated by a shared
+# front door which `setup.sh` puts on the server, so that several applications
+# can live on one machine without fighting over ports 80 and 443.
+#
 # The deploy workflow copies this directory to the server beside two files it
-# writes itself: `.env` (IMAGE and SITE_ADDRESS) and `app.env` (the APP_ENV
-# secret, handed to the application as environment variables).
+# writes itself: `.env` (IMAGE, SITE_ADDRESS and SITE_NAME) and `app.env` (the
+# APP_ENV secret, handed to the application as environment variables).
 
 services:
 
@@ -9,28 +12,31 @@ services:
     image: ${IMAGE:?IMAGE must name the image to run}
     restart: unless-stopped
     env_file: app.env
+    # The JVM sizes its heap against whatever memory it can see, so on a server
+    # shared with another application both will try to take most of it. Set the
+    # MEM_LIMIT repository variable to divide the server up; `0` is unlimited,
+    # which is right for a server running this application alone.
+    mem_limit: ${MEM_LIMIT:-0}
     volumes:
       - data:/app/data
+    networks:
+      # This application's own network, which nothing else can reach.
+      default:
+      # The network the front door watches. The alias is what the proxy sends
+      # traffic to, and must differ between applications: Compose would
+      # otherwise give every one of them the alias `app`, and the proxy would
+      # deal traffic out between whichever of them happened to be running.
+      web:
+        aliases:
+          - ${SITE_NAME:?SITE_NAME must name this application on the web network}
 
-  caddy:
-    image: caddy:2
-    restart: unless-stopped
-    depends_on:
-      - app
-    ports:
-      - "80:80"
-      - "443:443"
-      - "443:443/udp"
-    environment:
-      SITE_ADDRESS: ${SITE_ADDRESS:-:80}
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile:ro
-      - caddy-data:/data
-      - caddy-config:/config
+networks:
+  default:
+  # Created by `setup.sh`, and shared with the front door and any other
+  # application on this server.
+  web:
+    external: true
 
 volumes:
-  # The embedded database. Survives every redeploy; back it up.
+  # Anything the application keeps on disk. Survives every redeploy; back it up.
   data:
-  # Caddy's certificates, kept so that redeploys don't request new ones.
-  caddy-data:
-  caddy-config:
