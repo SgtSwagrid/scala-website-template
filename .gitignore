@@ -9,6 +9,12 @@ META-INF/
 *.log
 hs_err_pid*
 
+# Local data written by a running server (e.g. an embedded database)
+data/
+
+# Packaged server (sbt assemble)
+/app.jar
+
 # Build tools
 .bsp/
 .bloop/
