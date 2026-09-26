@@ -79,6 +79,8 @@ down for the couple of minutes between steps 3 and 5.
    cd ~/<old-repo> && docker compose down
    ```
 4. Copy `setup.sh` over and run it as root. It creates the `web` network and starts the front door.
+   It also replaces the deploy key, so put the key it prints into `DEPLOY_SSH_KEY` on **both**
+   repositories before going on, along with the host keys it prints as `DEPLOY_KNOWN_HOSTS`.
 5. Deploy the old application: **Actions → Deploy → Run workflow**. It comes back without a Caddy
    of its own, installs its site into the front door, and is served again.
 6. Deploy the new application the same way.
@@ -89,6 +91,35 @@ To check the front door afterwards:
 docker exec proxy caddy validate --config /etc/caddy/Caddyfile
 ls /srv/proxy/sites/
 docker logs --tail 20 proxy
+```
+
+### Adding a repository to a server that already has one
+
+`setup.sh` mints one key, named `github-actions`, and replaces it on every run. Where several
+repositories deploy to one server it is tidier to give each its own, so that one can be revoked
+without disturbing the rest and so that re-running `setup.sh` leaves them alone. On the server, as
+root, with `<repo>` in lower case:
+
+```bash
+work=$(mktemp -d); trap 'rm -rf "$work"' EXIT
+ssh-keygen -q -t ed25519 -N "" -C <repo> -f "$work/key"
+home=$(getent passwd deploy | cut -d: -f6)
+install -d -m 700 -o deploy -g deploy "$home/.ssh"
+touch "$home/.ssh/authorized_keys"
+grep -v ' <repo>$' "$home/.ssh/authorized_keys" > "$work/authorized_keys" || true
+cat "$work/key.pub" >> "$work/authorized_keys"
+install -m 600 -o deploy -g deploy "$work/authorized_keys" "$home/.ssh/authorized_keys"
+cat "$work/key"
+```
+
+That prints the private key for `DEPLOY_SSH_KEY`. It is never written to the server, and the
+comment on the key is what keeps `setup.sh` and the snippet above from treading on each other.
+
+`DEPLOY_KNOWN_HOSTS` is the same for every repository on the server. `<host>` must be exactly the
+value in `DEPLOY_HOST`, since that is the name the workflow connects to:
+
+```bash
+awk -v host='<host>' '{ print host, $1, $2 }' /etc/ssh/ssh_host_*_key.pub
 ```
 
 ### Memory
