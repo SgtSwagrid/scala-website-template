@@ -1,5 +1,5 @@
 # Build the server into an image and deploy it whenever CI passes on `main`.
-# Deploys nothing until the DEPLOY_HOST variable is set; see docs/DEPLOYMENT.md.
+# Deploys nothing until the HOSTNAME variable is set; see docs/DEPLOYMENT.md.
 # Pull requests that change the packaging build and try the image, unpublished.
 
 name: Deploy
@@ -32,7 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     # The configuration repositories hold these files only to pass them on.
     if: >-
-      (github.event_name == 'pull_request' || (vars.DEPLOY_HOST != '' && (
+      (github.event_name == 'pull_request' || (vars.HOSTNAME != '' && (
         github.event_name == 'workflow_dispatch' || (
           github.event.workflow_run.conclusion == 'success' &&
           github.event.workflow_run.event == 'push')))) &&
@@ -126,10 +126,10 @@ jobs:
       contents: read
       packages: read
     environment:
-      name: production
-      url: ${{ vars.DOMAIN && format('https://{0}', vars.DOMAIN) || format('http://{0}', vars.DEPLOY_HOST) }}
+      name: Production
+      url: ${{ vars.DOMAIN && format('https://{0}', vars.DOMAIN) || format('http://{0}', vars.HOSTNAME) }}
     env:
-      TARGET: ${{ vars.DEPLOY_USER || 'deploy' }}@${{ vars.DEPLOY_HOST }}
+      TARGET: ${{ vars.DEPLOY_USER || 'deploy' }}@${{ vars.HOSTNAME }}
 
     steps:
 
@@ -145,11 +145,17 @@ jobs:
         with:
           ref: ${{ github.event.workflow_run.head_sha || github.sha }}
 
+      # The host keys are public, so they are a variable rather than a secret.
+      # Without them SSH would refuse the server with a less helpful message.
       - name: Set up SSH
         env:
           KEY: ${{ secrets.DEPLOY_SSH_KEY }}
-          KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+          KNOWN_HOSTS: ${{ vars.KNOWN_HOSTS }}
         run: |
+          if [ -z "$KNOWN_HOSTS" ]; then
+            echo "::error::Set the KNOWN_HOSTS variable to the host keys printed by setup.sh."
+            exit 1
+          fi
           install -d -m 700 ~/.ssh
           printf '%s\n' "$KEY" > ~/.ssh/id_ed25519
           printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
@@ -159,10 +165,10 @@ jobs:
         env:
           IMAGE: ${{ needs.image.outputs.image }}
           SITE_ADDRESS: ${{ vars.DOMAIN || ':80' }}
-          APP_ENV: ${{ secrets.APP_ENV }}
+          ENVIRONMENT: ${{ secrets.ENVIRONMENT }}
         run: |
           printf 'IMAGE=%s\nSITE_ADDRESS=%s\nSITE_NAME=%s\n' "$IMAGE" "$SITE_ADDRESS" "$DIRECTORY" > deploy/.env
-          printf '%s\n' "$APP_ENV" > deploy/app.env
+          printf '%s\n' "$ENVIRONMENT" > deploy/app.env
           chmod 600 deploy/app.env
           export SITE_ADDRESS SITE_NAME="$DIRECTORY"
           envsubst '$SITE_ADDRESS $SITE_NAME' < deploy/site.caddy > deploy/site.rendered.caddy
@@ -198,7 +204,7 @@ jobs:
 
       - name: Check health
         env:
-          URL: ${{ vars.DOMAIN && format('https://{0}', vars.DOMAIN) || format('http://{0}', vars.DEPLOY_HOST) }}
+          URL: ${{ vars.DOMAIN && format('https://{0}', vars.DOMAIN) || format('http://{0}', vars.HOSTNAME) }}
         run: |
           for attempt in $(seq 30); do
             if curl -fsS "$URL/health"; then exit 0; fi
