@@ -4,7 +4,7 @@
 #
 # The deploy workflow copies this directory to the server beside two files it
 # writes itself: `.env` (IMAGE, SITE_ADDRESS and SITE_NAME) and `app.env` (the
-# APP_ENV secret, handed to the application as environment variables).
+# ENVIRONMENT secret, handed to the application as environment variables).
 
 services:
 

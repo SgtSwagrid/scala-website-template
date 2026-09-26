@@ -13,7 +13,7 @@ Every push to `main` that passes CI is deployed to one Linux server:
 4. The workflow waits for `/health` to answer. If it doesn't, the workflow fails and prints the
    server's logs.
 
-Nothing happens until the `DEPLOY_HOST` variable is set, so a repository without a server just
+Nothing happens until the `HOSTNAME` variable is set, so a repository without a server just
 skips the workflow. You can also run it by hand: **Actions → Deploy → Run workflow**.
 
 ## Setting up a server
@@ -34,14 +34,17 @@ month. The image is built on GitHub, so the server never compiles anything.
 
 2. In the repository, open **Settings → Secrets and variables → Actions** and add:
 
-   | Kind     | Name                 | Value                                                                |
-   |----------|----------------------|----------------------------------------------------------------------|
-   | Variable | `DEPLOY_HOST`        | The server's IP address or host name.                                |
-   | Variable | `DEPLOY_USER`        | `deploy` (the default).                                              |
-   | Variable | `DOMAIN`             | Optional. The site's domain, e.g. `app.example.com`.                 |
-   | Secret   | `DEPLOY_SSH_KEY`     | The private key printed by `setup.sh`.                               |
-   | Secret   | `DEPLOY_KNOWN_HOSTS` | The host keys printed by `setup.sh`. They pin the server's identity. |
-   | Secret   | `APP_ENV`            | Optional. The application's environment, one `NAME=value` per line.  |
+   | Kind     | Name             | Value                                                                |
+   |----------|------------------|----------------------------------------------------------------------|
+   | Variable | `HOSTNAME`       | The server's IP address or host name.                                |
+   | Variable | `DEPLOY_USER`    | `deploy` (the default).                                              |
+   | Variable | `DOMAIN`         | Optional. The site's domain, e.g. `app.example.com`.                 |
+   | Variable | `KNOWN_HOSTS`    | The host keys printed by `setup.sh`. They pin the server's identity. |
+   | Secret   | `DEPLOY_SSH_KEY` | The private key printed by `setup.sh`.                               |
+   | Secret   | `ENVIRONMENT`    | Optional. The application's environment, one `NAME=value` per line.  |
+
+   The host keys are public, as the server shows them to anyone who connects, so they are a
+   variable: what matters is that nobody can change them, and a variable is as safe from that.
 
    The private key is not kept on the server, so copy it before closing the session. Running
    `setup.sh` again issues a new one in place of the old.
@@ -80,7 +83,7 @@ down for the couple of minutes between steps 3 and 5.
    ```
 4. Copy `setup.sh` over and run it as root. It creates the `web` network and starts the front door.
    It also replaces the deploy key, so put the key it prints into `DEPLOY_SSH_KEY` on **both**
-   repositories before going on, along with the host keys it prints as `DEPLOY_KNOWN_HOSTS`.
+   repositories before going on, along with the host keys it prints as `KNOWN_HOSTS`.
 5. Deploy the old application: **Actions → Deploy → Run workflow**. It comes back without a Caddy
    of its own, installs its site into the front door, and is served again.
 6. Deploy the new application the same way.
@@ -115,8 +118,8 @@ cat "$work/key"
 That prints the private key for `DEPLOY_SSH_KEY`. It is never written to the server, and the
 comment on the key is what keeps `setup.sh` and the snippet above from treading on each other.
 
-`DEPLOY_KNOWN_HOSTS` is the same for every repository on the server. `<host>` must be exactly the
-value in `DEPLOY_HOST`, since that is the name the workflow connects to:
+`KNOWN_HOSTS` is the same for every repository on the server. `<host>` must be exactly the
+value in `HOSTNAME`, since that is the name the workflow connects to:
 
 ```bash
 awk -v host='<host>' '{ print host, $1, $2 }' /etc/ssh/ssh_host_*_key.pub
@@ -141,7 +144,7 @@ are overwritten.
 
 ## Application environment
 
-`APP_ENV` becomes the container's environment. Anything the server reads from its environment,
+`ENVIRONMENT` becomes the container's environment. Anything the server reads from its environment,
 such as API keys, belongs there, for example:
 
 ```
