@@ -1,16 +1,3 @@
-.git
-.github
-.idea
-.vscode
-.claude
-.devcontainer
-.scala-steward.conf
-**/.jvm
-**/.js
-**/.bsp
-**/target
-**/project/project
-app.jar
-data
-deploy
-*.md
+# The image holds nothing but the packaged server (see the Dockerfile).
+*
+!dist

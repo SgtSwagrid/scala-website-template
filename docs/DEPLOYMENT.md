@@ -2,8 +2,10 @@
 
 Every push to `main` that passes CI is deployed to one Linux server:
 
-1. [deploy.yml](../.github/workflows/deploy.yml) builds the [Dockerfile](../Dockerfile) into an image,
-   tagged with the commit, and pushes it to the GitHub Container Registry (`ghcr.io/<owner>/<repo>`).
+1. CI packages the server it has just built and tested with [deploy/package.sh](../deploy/package.sh).
+   [deploy.yml](../.github/workflows/deploy.yml) packs that into an image with the
+   [Dockerfile](../Dockerfile), tagged with the commit, and pushes it to the GitHub Container Registry
+   (`ghcr.io/<owner>/<repo>`). Nothing is compiled twice.
 2. It copies [deploy/](../deploy) to the server over SSH, and there `docker compose` pulls the new
    image and replaces the running container.
 3. [Caddy](https://caddyserver.com/) sits in front of the application. It serves HTTPS for your
@@ -177,6 +179,8 @@ docker exec proxy caddy reload --config /etc/caddy/Caddyfile
 ## Running the image locally
 
 ```bash
+bash deploy/package.sh
+sbt --client shutdown
 docker build -t app .
 docker run --rm -p 8080:8080 -v app-data:/app/data app
 ```

@@ -1,6 +1,7 @@
-# Build the server into an image and deploy it whenever CI passes on `main`.
-# Deploys nothing until the HOSTNAME variable is set; see docs/DEPLOYMENT.md.
-# Pull requests that change the packaging build and try the image, unpublished.
+# Pack the server CI built into an image, and deploy it whenever CI passes on
+# `main`. Deploys nothing until the HOSTNAME variable is set; see
+# docs/DEPLOYMENT.md. Pull requests that change the packaging build and try the
+# image, unpublished.
 
 name: Deploy
 
@@ -38,6 +39,7 @@ jobs:
           github.event.workflow_run.event == 'push')))) &&
       !endsWith(github.event.repository.name, '-config')
     permissions:
+      actions: read
       contents: read
       packages: write
     outputs:
@@ -57,6 +59,48 @@ jobs:
           echo "repository=$repository" >> "$GITHUB_OUTPUT"
           echo "image=$repository:$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
+      # CI packaged what it built and tested on main (see deploy/package.sh).
+      - name: Download package
+        id: download
+        if: github.event_name == 'workflow_run'
+        continue-on-error: true
+        uses: actions/download-artifact@v8
+        with:
+          name: package
+          path: dist
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ github.token }}
+
+      # Anything else, or a run whose package has since expired, is packaged
+      # here, reusing whatever the newest build cache CI saved still holds.
+      - name: Install Java
+        if: steps.download.outcome != 'success'
+        uses: actions/setup-java@v6
+        with:
+          java-version: "21"
+          distribution: "temurin"
+          cache: sbt
+
+      - name: Install SBT
+        if: steps.download.outcome != 'success'
+        uses: sbt/setup-sbt@v1
+        with:
+          disk-cache: false
+
+      - name: Restore build cache
+        if: steps.download.outcome != 'success'
+        uses: actions/cache/restore@v6
+        with:
+          path: ~/.cache/sbt
+          key: sbt-${{ runner.os }}-
+          restore-keys: sbt-${{ runner.os }}-
+
+      - name: Package
+        if: steps.download.outcome != 'success'
+        run: |
+          bash deploy/package.sh
+          sbt --client shutdown
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4
 
@@ -70,8 +114,6 @@ jobs:
           tags: |
             ${{ steps.name.outputs.image }}
             ${{ steps.name.outputs.repository }}:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
 
       # Start the image and fetch the page and everything it links to, which
       # fails if the server can't start or can't find its assets.
