@@ -21,7 +21,7 @@ object Dependencies:
     val catsMtl         = "1.7.0"
     val catsCollections = "0.9.10"
     val munit           = "1.0.3"
-    val munitCatsEffect = "2.2.0"
+    val munitCatsEffect = "2.2.1"
 
   /**
     * Core Tapir dependencies for defining API endpoints. Cross-compiled for
