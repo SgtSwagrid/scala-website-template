@@ -8,7 +8,7 @@ object Dependencies:
   object V:
 
     val tapir           = "1.13.32"
-    val slf4j           = "2.0.19"
+    val slf4j           = "2.0.20"
     val logback         = "1.6.4"
     val fs2             = "3.14.0"
     val assetLoader     = "0.1.12"
