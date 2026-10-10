@@ -14,7 +14,7 @@ import sttp.tapir.*
   */
 object CoreService extends Service("core"):
 
-  private val assetService = new AssetService(
+  private val assetService = new AssetService[IO](
     "assets",
     Env.ASSETS_DIR,
     if Env.DEV_MODE then 0 else 3600,
@@ -24,7 +24,7 @@ object CoreService extends Service("core"):
     * An endpoint that serves static files from the client's "resources"
     * directory. Returns `304 Not Modified` if the client's cached ETag matches.
     */
-  lazy val assets: Endpoint = assetService.serverEndpoint[IO]
+  lazy val assets: Endpoint = assetService.serverEndpoint
 
   /**
     * An endpoint that establishes a websocket connection so that the client is

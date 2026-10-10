@@ -13,7 +13,7 @@ import sttp.tapir.*
 /** These are general endpoints which are used across the entire application. */
 object CoreApi:
 
-  private val assetService = new AssetService(
+  private val assetService = new AssetService[IO](
     "assets",
     Env.ASSETS_DIR,
     if Env.DEV_MODE then 0 else 3600,
