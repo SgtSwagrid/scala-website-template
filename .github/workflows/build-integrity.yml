@@ -120,11 +120,11 @@ jobs:
       # packaged. Main is packaged here, from the build just tested, for the
       # Deploy workflow to ship rather than build again.
       - name: Package
-        if: github.event_name == 'push' && hashFiles('deploy/package.sh') != ''
+        if: github.event_name == 'push' && hashFiles('deploy/package.sh') != '' && !endsWith(github.event.repository.name, '-config')
         run: bash deploy/package.sh
 
       - name: Upload package
-        if: github.event_name == 'push' && hashFiles('deploy/package.sh') != ''
+        if: github.event_name == 'push' && hashFiles('deploy/package.sh') != '' && !endsWith(github.event.repository.name, '-config')
         uses: actions/upload-artifact@v7
         with:
           name: package
