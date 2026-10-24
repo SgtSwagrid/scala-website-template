@@ -12,8 +12,7 @@ It is built on [Cats Effect](https://typelevel.org/cats-effect/), [Tapir](https:
 | Package | Description |
 |---------|-------------|
 | `api/` | Tapir endpoint *specifications* (inputs, outputs, error types). |
-| `services/` | Endpoint *implementations*, grouped thematically by service. |
-| `assets/` | Static file serving with MD5 ETag computation and in-memory caching. |
+| `services/` | Endpoint *implementations*, grouped thematically by service. Static assets are served by [asset-loader](https://github.com/SgtSwagrid/asset-loader), from `CoreService`. |
 | `html/` | The HTML page template, shared across all pages. |
 | `config/` | Environment and system property configuration. |
 

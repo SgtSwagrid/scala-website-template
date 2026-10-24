@@ -11,7 +11,7 @@ The entire subproject is bundled into a single file, `main.js`, which is served 
 |---------|-------------|
 | `views/` | One object per page, each extending [`View`](src/main/scala/views/View.scala). |
 | `components/` | Reusable UI components shared across multiple views. |
-| `dev/` | Development utilities (e.g. hot reload). Not included in production builds. |
+| `dev/` | Development utilities (e.g. hot reload), which the server only enables in development mode. |
 
 ## Adding a View
 
