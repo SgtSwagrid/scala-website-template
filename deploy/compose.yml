@@ -3,8 +3,9 @@
 # can live on one machine without fighting over ports 80 and 443.
 #
 # The deploy workflow copies this directory to the server beside two files it
-# writes itself: `.env` (IMAGE, SITE_ADDRESS and SITE_NAME) and `app.env` (the
-# ENVIRONMENT secret, handed to the application as environment variables).
+# writes itself: `.env` (IMAGE, SITE_ADDRESS, SITE_NAME and MEM_LIMIT) and
+# `app.env` (the ENVIRONMENT secret, handed to the application as environment
+# variables).
 
 services:
 

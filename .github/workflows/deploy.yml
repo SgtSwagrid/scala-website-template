@@ -203,13 +203,16 @@ jobs:
           printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
           chmod 600 ~/.ssh/id_ed25519
 
+      # MEM_LIMIT divides a server shared by several applications between them
+      # (see docs/DEPLOYMENT.md); `0`, the default, is no limit.
       - name: Write configuration
         env:
           IMAGE: ${{ needs.image.outputs.image }}
           SITE_ADDRESS: ${{ vars.DOMAIN || ':80' }}
+          MEM_LIMIT: ${{ vars.MEM_LIMIT || '0' }}
           ENVIRONMENT: ${{ secrets.ENVIRONMENT }}
         run: |
-          printf 'IMAGE=%s\nSITE_ADDRESS=%s\nSITE_NAME=%s\n' "$IMAGE" "$SITE_ADDRESS" "$DIRECTORY" > deploy/.env
+          printf 'IMAGE=%s\nSITE_ADDRESS=%s\nSITE_NAME=%s\nMEM_LIMIT=%s\n' "$IMAGE" "$SITE_ADDRESS" "$DIRECTORY" "$MEM_LIMIT" > deploy/.env
           printf '%s\n' "$ENVIRONMENT" > deploy/app.env
           chmod 600 deploy/app.env
           export SITE_ADDRESS SITE_NAME="$DIRECTORY"

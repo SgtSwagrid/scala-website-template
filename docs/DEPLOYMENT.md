@@ -153,7 +153,8 @@ such as API keys, belongs there, for example:
 SOME_API_KEY=...
 ```
 
-Leave out `HOST` and `PORT`. The image sets them.
+Leave out `HOST` and `PORT`. The image sets `HOST`, and the front door expects the default port,
+8080.
 
 ## Data
 
