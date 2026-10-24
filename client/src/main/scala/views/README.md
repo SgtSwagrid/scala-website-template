@@ -1,6 +1,6 @@
 # Views
 
-## Show I make a view or a component?
+## Should I make a view or a component?
 
 All views and components are made using [Laminar](https://laminar.dev/) and [Airstream](https://github.com/raquo/Airstream).
 However, they differ in that:

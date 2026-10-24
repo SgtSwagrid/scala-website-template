@@ -15,13 +15,16 @@ This is a Scala website that provides ...
 
 ### Deployment
 
-See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md). `.github/workflows/deploy.yml` builds the `Dockerfile`
-after CI passes on `main`, pushes it to GHCR and runs `deploy/compose.yml` (the app behind Caddy) on
-the server named by the `DEPLOY_HOST` variable over SSH; pull requests touching packaging only build
-and try the image. The fat JAR does not contain its assets: the image copies the server's
-`resource_managed/main/assets` beside it and passes `-Dassets.dir`. Serve the site from a host of
-its own, never a sub-path, as every URL is absolute. Anything the server reads from its environment
-is supplied through the `APP_ENV` secret, never baked into the image.
+See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md). After CI passes on `main`, `.github/workflows/deploy.yml`
+packs what CI packaged (`deploy/package.sh`) into the `Dockerfile`'s image, pushes it to GHCR and runs
+`deploy/compose.yml` (the app alone, behind the server's shared Caddy front door) over SSH on the
+server named by the `HOSTNAME` variable; it deploys nothing while `HOSTNAME` is unset, and pull
+requests touching packaging only build and try the image. Its other settings are the `DEPLOY_USER`,
+`DOMAIN`, `KNOWN_HOSTS` and `MEM_LIMIT` variables and the `DEPLOY_SSH_KEY` secret. The fat JAR does
+not contain its assets: `deploy/package.sh` copies the server's `resource_managed/main/assets` beside
+it, and the image passes `-Dassets.dir`. Serve the site from a host of its own, never a sub-path, as
+every URL is absolute. Anything the server reads from its environment is supplied through the
+`ENVIRONMENT` secret, never baked into the image.
 
 ## Instructions
 

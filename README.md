@@ -1,6 +1,6 @@
 <div align="center">
   <h1>🌐 Scala Website Template</h1>
-  <p>A reusable template for full stack websites in Scala.
+  <p>A reusable template for full stack websites in Scala.</p>
 </div>
 
 <br><br>
@@ -28,7 +28,7 @@ In case you find yourself having to make adjustments, please consider contributi
 
 ## 📋 What's included?
 
-1. Everything from [Scala Website Config](https://github.com/SgtSwagrid/scala-website-config), including reasonable [Scalafmt](https://scalameta.org/scalafmt/) settings, CI piplines for build integrity, and some IDE config.
+1. Everything from [Scala Website Config](https://github.com/SgtSwagrid/scala-website-config), including reasonable [Scalafmt](https://scalameta.org/scalafmt/) settings, CI pipelines for build integrity, and some IDE config.
 2. A collection of common libraries that work well together (see [Dependencies](#-dependencies)).
 3. Example build configuration and setup instructions. In particular, this demonstrates how to serve compiled Scala code to the client as a static JavaScript file.
 
@@ -39,17 +39,23 @@ In case you find yourself having to make adjustments, please consider contributi
 Click '[**Use this template**](https://github.com/new?template_name=scala-website-template&template_owner=SgtSwagrid)' on GitHub, and follow the instructions to create a new repository for your website.
 All files herein will be copied as-is.
 
-### 2. Configure [build.sbt](build.sbt)
+### 2. Make it your own
 
-You'll need to set the `name`, `organization`, and `version` fields in [build.sbt](./build.sbt) and `projectRoot` in [Subprojects.scala](./project/Subprojects.scala).
+- In [build.sbt](./build.sbt), set the `name`, `organization`, and `version` fields, rename the root project (`` `scala-website-template` ``) to match `name`, and replace `"Scala Website Template"` with your website's title.
+- In [Subprojects.scala](./project/Subprojects.scala), set `projectRoot` to your base package. It also names the server's main class, so if you change it, rename the `package` of every source file to match.
+- In [CoreService.scala](./server/src/main/scala/services/CoreService.scala), set the index page's `pageTitle`, which the browser shows in its tab.
+- In [CLAUDE.md](./CLAUDE.md), complete the project overview ("This is a Scala website that provides ...").
+- In this README, delete everything above the line below, and fill in the title, description, badge URLs and clone commands of what remains.
 
 ### 3. Add repository secrets
 
-You may also wish to set the `GH_TOKEN` local environment variable _and_ GitHub repository secret (see [Environment Variables](#environment-variables)) to help with agentic and CI workflows.
-
-Secrets can be added from the GitHub web interface by nagivating as follows from your repository's page:
+The workflows read these secrets, which can be added from the GitHub web interface by navigating as follows from your repository's page:
 
 > **Settings → Secrets and variables → Actions**
+
+- `GH_TOKEN` - a [personal access token](https://github.com/settings/personal-access-tokens) with read and write access to Contents, Pull requests, Administration, and Workflows in this repository. The Import Rulesets workflow uses it to apply [.github/rulesets](./.github/rulesets) and [.github/settings.json](./.github/settings.json) (its first run, before the secret exists, fails, so run it once from the **Actions** tab after adding it), and CI uses it so that a commit fixing the formatting starts CI again. Set it as a local environment variable too (see Environment variables, below).
+- `CLAUDE_CODE_OAUTH_TOKEN` (optional) - the output of `claude setup-token`, so that mentioning `@claude` in an issue or pull request starts [Claude Code](https://code.claude.com/docs/en/overview).
+- The variables and secrets for automatic deployment (optional) are listed in [DEPLOYMENT.md](./docs/DEPLOYMENT.md).
 
 ### Done!
 
@@ -65,7 +71,7 @@ In particular, and contra [LICENSE.md](LICENSE.md), you may remove the license t
 ## 🤝 Contributing
 
 [CONTRIBUTING.md](CONTRIBUTING.md) is also part of the template, and does not _necessarily_ apply to contributions to the template itself.
-The most important thing to know is that many of the configuration files are automatically synced from [Scala Config](https://github.com/SgtSwagrid/scala-config), and should be updated there rather than here.
+The most important thing to know is that many of the configuration files are automatically synced from [Scala Website Config](https://github.com/SgtSwagrid/scala-website-config) (and, through it, from [Scala Config](https://github.com/SgtSwagrid/scala-config)), and should be updated there rather than here.
 
 ## 👁️ See also
 
@@ -83,7 +89,7 @@ The most important thing to know is that many of the configuration files are aut
 
   <!-- Update the following URLS to show live build status in your README. -->
   <span>
-    <a href="https://github.com/SgtSwagrid/scala-website-template/actions/workflows/ci.yml"><img src="https://github.com/SgtSwagrid/scala-website-template/actions/workflows/build-integrity.yml/badge.svg" alt="Build status" /></a>
+    <a href="https://github.com/SgtSwagrid/scala-website-template/actions/workflows/build-integrity.yml"><img src="https://github.com/SgtSwagrid/scala-website-template/actions/workflows/build-integrity.yml/badge.svg" alt="Build status" /></a>
     <a href="https://alecdorrington.com/scala-website-template"><img src="https://img.shields.io/badge/docs-latest-blue.svg" alt="Documentation" /></a>
   </span>
 
@@ -94,12 +100,12 @@ The most important thing to know is that many of the configuration files are aut
 In order to locally run or work on this project, you'll need to have the following installed:
 
 - **[Scala 3](https://www.scala-lang.org/)*** - a [functional](https://en.wikipedia.org/wiki/Functional_programming) programming language on the [JVM](https://en.wikipedia.org/wiki/Java_virtual_machine).
-- **[sbt 1.12.4](https://www.scala-sbt.org/) or newer** - the preeminent build tool of the Scala ecosystem (configured in [build.sbt](./build.sbt)).
+- **[sbt 2.0.11](https://www.scala-sbt.org/) or newer** - the preeminent build tool of the Scala ecosystem (configured in [build.sbt](./build.sbt)).
 - **[JDK 21](https://www.oracle.com/java/technologies/downloads/)** - a runtime environment for the JVM (compatibility of JDK 25 is uncertain).
 - **[Git](https://git-scm.com/)** - for version control.
-- **[Node.js](https://nodejs.org/)** - used by the [Playwright](https://playwright.dev/) MCP server for browser automation during development (optional).
+- **[Node.js](https://nodejs.org/)** - runs the tests of the *client*, which are compiled to JavaScript (only needed for `sbt test`).
 
-*Installing Scala separately isn't strictly required, as the correct version (currently [3.8.2](https://www.scala-lang.org/download/3.8.2.html)) will be fetched by sbt in the build process.
+*Installing Scala separately isn't strictly required, as the correct version (currently [3.9.0](https://www.scala-lang.org/download/3.9.0.html)) will be fetched by sbt in the build process.
 However, it may still be helpful for testing.
 
 ## ⬇️ Installation
@@ -144,7 +150,7 @@ See [DEPLOYMENT.md](./docs/DEPLOYMENT.md) to set one up. Until then, the workflo
 
 The following environment variables can be set to configure your local instance:
 
-- `GH_TOKEN` - your [personal access token (PAT)](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) from GitHub, used by [Claude](https://claude.com/product/claude-code) with GitHub's [MCP server](https://github.com/github/github-mcp-server) to interact with GitHub on your behalf, and by the Initialise Repository workflow. Click [here](https://github.com/settings/personal-access-tokens) to create a new PAT (only allow access to this repository, and disallow all destructive actions). Also add this as a GitHub [repository secret](https://docs.github.com/en/actions/how-tos/write-workflows/choose-what-workflows-do/use-secrets) named `GH_TOKEN`.
+- `GH_TOKEN` - your [personal access token (PAT)](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) from GitHub, used by [Claude](https://claude.com/product/claude-code) with GitHub's [MCP server](https://github.com/github/github-mcp-server) (configured in [.mcp.json](./.mcp.json)) to interact with GitHub on your behalf. Click [here](https://github.com/settings/personal-access-tokens) to create a new PAT (only allow access to this repository, with read and write access to Contents, Pull requests, Administration, and Workflows). Also add this as a GitHub [repository secret](https://docs.github.com/en/actions/how-tos/write-workflows/choose-what-workflows-do/use-secrets) named `GH_TOKEN`, which CI and the Import Rulesets and Export Rulesets workflows use.
 - `HOST` - the [address](https://en.wikipedia.org/wiki/Hostname) on which the development server listens for requests (default: `localhost`).
 - `PORT` - the [port](https://en.wikipedia.org/wiki/Port_(computer_networking)) on which the development server listens for requests (default: `8080`).
 
@@ -189,13 +195,13 @@ Build configurations for the subprojects can be found in [Subprojects.scala](./p
 ## 📋 Dependencies
 
 The following open-source libraries are used. You do not need to install these manually, as they are managed by sbt.
-Dependencies are defined in [Subprojects.scala](./project/Dependencies.scala).
+Dependencies are defined in [Dependencies.scala](./project/Dependencies.scala).
 
-- **[scalafmt](https://scalameta.org/scalafmt/)** - a code formatter to ensure a consistent style (configured by [.scalafmt.conf](./main/.scalafmt.conf)).
+- **[scalafmt](https://scalameta.org/scalafmt/)** - a code formatter to ensure a consistent style (configured by [.scalafmt.conf](./.scalafmt.conf)).
 - **[Tapir 1.13](https://tapir.softwaremill.com/en/latest/)** - a layer to define and implement HTTP APIs.
 - **[Netty](https://netty.io/)** - an asynchronous web server for the JVM (integrated with Tapir, among other [options](https://tapir.softwaremill.com/en/latest/server/overview.html)).
-- **[Swagger](https://swagger.io/)** - a UI for exploring and testing server endpoints (integrated with Tapir, see [localhost:8080/docs](localhost:8080/docs)).
-- **[Prometheus](https://prometheus.io/)** - for metrics and performance monitoring (integrated with Tapir, not yet enabled).
+- **[Swagger](https://swagger.io/)** - a UI for exploring and testing server endpoints (integrated with Tapir, at [localhost:8080/docs](http://localhost:8080/docs) during development).
+- **[Prometheus](https://prometheus.io/)** - for metrics and performance monitoring (integrated with Tapir, served at `/metrics`).
 - **[asset-loader](https://github.com/SgtSwagrid/asset-loader)** - for serving static assets.
 - **[Scala.js](https://www.scala-js.org/)** - the official Scala-to-JS transpiler.
 - **[Laminar 17](https://laminar.dev/)** - a library for building reactive web-based user interfaces (and extended by [laminext](https://github.com/tulz-app/laminext)).
