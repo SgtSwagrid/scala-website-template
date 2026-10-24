@@ -42,7 +42,7 @@ object Template:
         <META charset="UTF-8">
         <META name="viewport" content="width=device-width, initial-scale=1.0">
         <SCRIPT type="text/javascript" src="/assets/scripts/main.js"></SCRIPT>
-        <LINK rel="icon" type="image/x-icon" href="/assets/img/icon.png">
+        <LINK rel="icon" type="image/png" sizes="512x512" href="/assets/img/icon.png">
       </HEAD>
       <BODY style="height: 100vh">
         <DIV id="root" style="width: 100%; height: 100%; position: absolute;"></DIV>
