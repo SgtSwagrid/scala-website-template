@@ -58,4 +58,4 @@ When asked to publish the code changes, your task is to open one or more pull re
 - When creating a PR, ensure that the title and description are clear, informative, and comprehensive.
 - All feature/bugfix/etc branch names should be formatted as "feature_<short description>" or "fix_<short description>" or similar.
 - All PR titles should be formatted as "[<scope>] <Short summary>", e.g. "[renderer] Fixed colour inversion bug."
-- You have GitHub MCP integration that can be used to do the above.
+- Use the `gh` CLI to do the above.
