@@ -7,7 +7,7 @@ object Dependencies:
   /** The version to use for each dependency. */
   object V:
 
-    val tapir           = "1.13.33"
+    val tapir           = "1.14.0"
     val slf4j           = "2.0.20"
     val logback         = "1.6.6"
     val fs2             = "3.14.0"
