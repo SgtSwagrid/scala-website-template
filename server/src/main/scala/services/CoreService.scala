@@ -2,10 +2,10 @@ package com.alecdorrington.server
 package services
 
 import cats.effect.IO
+import com.alecdorrington.assetloader.tapir.AssetService
 import com.alecdorrington.server.api.CoreApi
 import com.alecdorrington.server.config.Env
 import com.alecdorrington.server.html.Template
-import io.github.sgtswagrid.assetloader.tapir.AssetService
 import sttp.tapir.*
 
 /**
