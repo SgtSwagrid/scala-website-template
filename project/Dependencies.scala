@@ -11,7 +11,7 @@ object Dependencies:
     val slf4j           = "2.0.20"
     val logback         = "1.6.6"
     val fs2             = "3.14.0"
-    val assetLoader     = "0.1.12"
+    val assetLoader     = "0.2.7"
     val scalajs         = "2.8.1"
     val laminar         = "17.0.0"
     val laminext        = "0.17.0"
@@ -45,8 +45,8 @@ object Dependencies:
   )
 
   lazy val assetLoader = libraryDependencies ++= Seq(
-    "io.github.sgtswagrid" %% "asset-loader"       % V.assetLoader,
-    "io.github.sgtswagrid" %% "asset-loader-tapir" % V.assetLoader,
+    "com.alecdorrington"   %% "asset-loader"       % V.assetLoader,
+    "com.alecdorrington"   %% "asset-loader-tapir" % V.assetLoader,
   )
 
   /** Library dependencies for logging. */
