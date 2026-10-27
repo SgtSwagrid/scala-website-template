@@ -16,6 +16,7 @@ data/
 /app.jar
 
 # Build tools
+node_modules/
 .bsp/
 .bloop/
 .metals/
