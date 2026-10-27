@@ -2,9 +2,9 @@ package com.alecdorrington.server
 package api
 
 import cats.effect.IO
+import com.alecdorrington.assetloader.Asset
+import com.alecdorrington.assetloader.tapir.AssetService
 import com.alecdorrington.server.config.Env
-import io.github.sgtswagrid.assetloader.Asset
-import io.github.sgtswagrid.assetloader.tapir.AssetService
 import scala.NamedTuple.DropNames
 import sttp.capabilities.fs2.Fs2Streams
 import sttp.model.StatusCode
