@@ -22,6 +22,11 @@ jobs:
       contents: write
       pull-requests: write
 
+    # Warnings fail the build, of the tests as much as of the code, wherever
+    # sbt is started in this job (see `project/Werror.scala`).
+    env:
+      WERROR: "true"
+
     steps:
 
       # A pull request's own branch rather than its merge, so that a formatting
@@ -32,6 +37,22 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
           token: ${{ secrets.GH_TOKEN || github.token }}
+
+      # Scalafmt Revolver checks the formatting with Scalafmt's native image,
+      # before anything is installed for the build, and fixes it if need be:
+      # by a commit to a pull request, or else by a pull request of its own.
+      - name: Check formatting
+        id: format
+        uses: SgtSwagrid/scalafmt-revolver@main
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+
+      # The fixed code is built by the run its commit starts, not by this one.
+      - name: Stop after fixing
+        if: steps.format.outputs.formatted != 'true'
+        run: |
+          echo "::error::The code was not formatted, so a commit fixing it was made, which CI builds instead."
+          exit 1
 
       - name: Install Java
         uses: actions/setup-java@v6
@@ -63,53 +84,9 @@ jobs:
 
       # Every sbt command from here on goes to the one server the first starts,
       # so the build is loaded once, however many steps use it.
-      - name: Check formatting
-        id: format
-        continue-on-error: true
-        run: sbt --client scalafmtCheckAll
-
-      - name: Fix formatting
-        if: steps.format.outcome == 'failure'
-        run: sbt --client scalafmtAll
-
-      # A pull request is given the fix as a commit of its own.
-      - name: Commit formatting
-        if: steps.format.outcome == 'failure' && github.event_name == 'pull_request'
-        uses: stefanzweifel/git-auto-commit-action@v7
-        with:
-          commit_message: "[linter] Fixed code style violations with `sbt scalafmtAll`."
-
-      # Main is offered it in a pull request.
-      - name: Checkout scalafmt-revolver
-        if: steps.format.outcome == 'failure' && github.event_name != 'pull_request'
-        uses: actions/checkout@v7
-        with:
-          repository: SgtSwagrid/scalafmt-revolver
-          path: .scalafmt-revolver
-
-      - name: Propose formatting
-        if: steps.format.outcome == 'failure' && github.event_name != 'pull_request'
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-          REPO_DIR: .
-          BASE_BRANCH: ${{ github.ref_name }}
-          UPDATE_BRANCH: scalafmt
-          PR_TITLE: "[scalafmt-revolver] Fixed code style violations with `sbt scalafmtAll`."
-          PR_BODY_FILE: .scalafmt-revolver/templates/pull-request-body.md
-        run: |
-          echo .scalafmt-revolver >> .git/info/exclude
-          bash .scalafmt-revolver/scripts/publish.sh
-
-      # The fixed code is built by the run its commit starts, not by this one.
-      - name: Stop after fixing
-        if: steps.format.outcome == 'failure'
-        run: |
-          echo "::error::The code was not formatted, so a commit fixing it was made, which CI builds instead."
-          exit 1
-
-      # Warnings fail the build, of the tests as much as of the code.
       - name: Build
-        run: sbt --client 'set ThisBuild / scalacOptions += "-Werror"; Test/compile'
+        id: build
+        run: sbt --client Test/compile
 
       # Every test runs: sbt's `test` would skip those it has results for, and
       # takes no account of a change to the resources they read.
@@ -131,12 +108,13 @@ jobs:
           path: dist
           retention-days: 1
 
+      # Only once started, as `sbt --client` would otherwise start a server.
       - name: Stop sbt
-        if: always()
+        if: always() && steps.build.outcome != 'skipped'
         run: sbt --client shutdown || true
 
       - name: Save build cache
-        if: ${{ !cancelled() && steps.format.outcome == 'success' }}
+        if: ${{ !cancelled() && steps.format.outputs.formatted == 'true' }}
         uses: actions/cache/save@v6
         with:
           path: ~/.cache/sbt

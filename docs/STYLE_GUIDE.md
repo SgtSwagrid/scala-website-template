@@ -2,7 +2,7 @@
 
 This document lays out the basic principles which govern the coding style in this project.
 The rules here are not of a strictly binding nature, and can be broken when there is good reason for doing so.
-While this document is for humans too, some of the excessive specificity is for the sake of LLM agents.
+While this document is for humans too, some of the excessive specificity is for the sake of coding agents.
 
 ## 🤖 Scalafmt
 
@@ -19,7 +19,7 @@ or else the CI pipeline won't allow it to be merged.
 - This project follows a [functional](https://en.wikipedia.org/wiki/Functional_programming) style:
   - Use pure functions without [side effects](https://en.wikipedia.org/wiki/Side_effect_(computer_science)), or with _explicit_ side effects where unavoidable.
   - Use [immutable](https://en.wikipedia.org/wiki/Persistent_data_structure) data structures and variables, where state updates are by duplication rather than by mutation.
-  - Consistently use fine-grained [types](https://shekhar14.medium.com/type-theory-and-functional-programming-52f81deb36f1).
+  - Consistently use fine-grained [typing](https://shekhar14.medium.com/type-theory-and-functional-programming-52f81deb36f1) and [algebraic data types](https://en.wikipedia.org/wiki/Algebraic_data_type).
   - Avoid local or multiple returns, and instead use expression-based conditionals (`if` + `else`) or pattern matching.
 - When performance constraints necessitate the use of mutable state in a limited scope, this is allowed.
 - Hide complexity behind well-named mathematical abstractions where possible, so that the code reads like the math it represents.
@@ -29,7 +29,7 @@ or else the CI pipeline won't allow it to be merged.
   - Removing duplicated code will quite possibly involve rewriting existing functions with a more general interface.
 - Write very short methods (ideally 1-3 lines) that do one thing, and form more complex behaviour by composing them.
   If a method is longer than 5 lines, consider breaking it up.
-- When possible, prefer inheritance with `-Ops`-style traits and F-bounded polymorphism rather than type classes.
+- When possible, prefer inheritance with `-Ops`-style traits and F-bounded polymorphism, rather than type classes.
 
 ### Syntax
 
@@ -65,10 +65,14 @@ or else the CI pipeline won't allow it to be merged.
 - All sentences should start with a capital letter and end with a period (`.`).
   This includes after tags such as `@param` and `@return`.
 - Parameter descriptions (i.e. with `@param`) use definite articles (e.g. "The").
-- Return value descriptions (i.e. with `@return`) use indefinite articles (e.g. "A", "An").
+- Return value descriptions (i.e. with `@return`) are noun phrases.
+  Use "The" for a value the inputs determine (e.g. "The sum of ...", "The number of ..."),
+  "A" or "An" for one of many possible values, such as a new copy (e.g. "A copy of this chat ..."),
+  and "This" for the receiver changed (e.g. "This graph with ...").
+  Describe a Boolean result as "Whether ...".
 
 ## 🔁 Origin
 
 The primary source of truth for this document can be found in the [Scala Config](https://github.com/SgtSwagrid/scala-config) repository,
-from which it is automatically synchronised with [Github Graph](https://github.com/SgtSwagrid/github-graph).
+from which it is automatically synchronised using [Github Graph](https://github.com/SgtSwagrid/github-graph).
 This should be updated there rather than here, lest any changes be subsequently reverted.
