@@ -8,7 +8,7 @@ It is [cross-compiled](https://www.scala-js.org/doc/project/cross-build.html) - 
 Put code in `common` when it needs to be used by both the server and the client.
 Typical candidates include:
 
-- **Shared data types** - case classes that are serialised (e.g. with [Circe](https://circe.github.io/circe/)) and exchanged between client and server.
+- **Shared data types** - case classes that are serialised (e.g. with [Circe](https://circe.io/circe/)) and exchanged between client and server.
 - **Pure algorithms** - logic with no platform-specific dependencies that is useful on both sides.
 
 ## Constraints
