@@ -8,13 +8,6 @@
       "extensions": [
         "scalameta.metals",
         "scala-lang.scala",
-        "anthropic.claude-code",
-        "DavidAnson.vscode-markdownlint",
-        "github.vscode-github-actions",
-        "github.vscode-pull-request-github",
-        "mhutchie.git-graph",
-        "codezombiech.gitignore",
-        "azuretools.vscode-containers"
       ]
     }
   }

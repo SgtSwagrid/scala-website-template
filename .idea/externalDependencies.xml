@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ExternalDependencies">
-    <plugin id="Git4Idea" />
-    <plugin id="com.anthropic.code.plugin" />
-    <plugin id="com.github.xepozz.gitattributes" />
-    <plugin id="com.intellij.mcpServer" />
-    <plugin id="mobi.hsz.idea.gitignore" />
     <plugin id="org.intellij.scala" />
-    <plugin id="org.jetbrains.plugins.github" />
-    <plugin id="org.jetbrains.plugins.yaml" />
   </component>
 </project>

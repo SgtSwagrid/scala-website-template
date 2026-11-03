@@ -19,6 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     permissions:
+      actions: read
       contents: write
       pull-requests: write
 
@@ -38,23 +39,58 @@ jobs:
           ref: ${{ github.head_ref }}
           token: ${{ secrets.GH_TOKEN || github.token }}
 
+      # A push to main whose files a pull request's run has already built and
+      # tested, as when a pull request that was up to date with main is merged,
+      # is not built or tested again: every step from here on is skipped, but
+      # for passing on that run's package. So the run must have passed, and in
+      # a repository that deploys itself, must still have its package.
+      - name: Find a run that tested these files
+        id: tested
+        if: github.event_name == 'push'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DEPLOYS: ${{ hashFiles('deploy/package.sh') != '' && !endsWith(github.event.repository.name, '-config') }}
+        run: |
+          tree=$(git rev-parse 'HEAD^{tree}')
+          workflow="${GITHUB_WORKFLOW_REF%@*}"
+          run=$(
+            gh api "repos/$GITHUB_REPOSITORY/actions/workflows/${workflow##*/}/runs?event=pull_request&status=success&per_page=100" \
+              --jq "[.workflow_runs[] | select(.head_commit.tree_id == \"$tree\")][0].id // empty"
+          )
+          if [[ -n "$run" && "$DEPLOYS" == "true" ]]; then
+            packages=$(
+              gh api "repos/$GITHUB_REPOSITORY/actions/runs/$run/artifacts?name=package" \
+                --jq '[.artifacts[] | select(.expired | not)] | length'
+            )
+            if [[ "$packages" == "0" ]]; then
+              echo "Run $run tested these files, but its package has expired, so they are tested again."
+              run=""
+            fi
+          fi
+          if [[ -n "$run" ]]; then
+            echo "::notice::$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$run already built and tested these files, so this run does not."
+          fi
+          echo "run=$run" >> "$GITHUB_OUTPUT"
+
       # Scalafmt Revolver checks the formatting with Scalafmt's native image,
       # before anything is installed for the build, and fixes it if need be:
       # by a commit to a pull request, or else by a pull request of its own.
       - name: Check formatting
         id: format
+        if: steps.tested.outputs.run == ''
         uses: SgtSwagrid/scalafmt-revolver@main
         with:
           token: ${{ secrets.GH_TOKEN }}
 
       # The fixed code is built by the run its commit starts, not by this one.
       - name: Stop after fixing
-        if: steps.format.outputs.formatted != 'true'
+        if: steps.tested.outputs.run == '' && steps.format.outputs.formatted != 'true'
         run: |
           echo "::error::The code was not formatted, so a commit fixing it was made, which CI builds instead."
           exit 1
 
       - name: Install Java
+        if: steps.tested.outputs.run == ''
         uses: actions/setup-java@v6
         with:
           java-version: "21"
@@ -62,6 +98,7 @@ jobs:
           cache: sbt
 
       - name: Install SBT
+        if: steps.tested.outputs.run == ''
         uses: sbt/setup-sbt@v1
         with:
           disk-cache: false
@@ -73,9 +110,11 @@ jobs:
       # main's. It only ever grows, so it is begun afresh each week.
       - name: Name build cache
         id: cache
+        if: steps.tested.outputs.run == ''
         run: echo "prefix=sbt-${{ runner.os }}-$(date -u +%G-W%V)-" >> "$GITHUB_OUTPUT"
 
       - name: Restore build cache
+        if: steps.tested.outputs.run == ''
         uses: actions/cache/restore@v6
         with:
           path: ~/.cache/sbt
@@ -86,22 +125,34 @@ jobs:
       # so the build is loaded once, however many steps use it.
       - name: Build
         id: build
+        if: steps.tested.outputs.run == ''
         run: sbt --client Test/compile
 
       # Every test runs: sbt's `test` would skip those it has results for, and
       # takes no account of a change to the resources they read.
       - name: Test
+        if: steps.tested.outputs.run == ''
         run: sbt --client testFull
 
       # A repository that deploys itself says in `deploy/package.sh` how it is
-      # packaged. Main is packaged here, from the build just tested, for the
-      # Deploy workflow to ship rather than build again.
+      # packaged. Each run packages the build it has just tested, for the Deploy
+      # workflow to ship rather than build again: main's, or a pull request's,
+      # for the run on main to pass on if it has the same files.
       - name: Package
-        if: github.event_name == 'push' && hashFiles('deploy/package.sh') != '' && !endsWith(github.event.repository.name, '-config')
+        if: steps.tested.outputs.run == '' && hashFiles('deploy/package.sh') != '' && !endsWith(github.event.repository.name, '-config')
         run: bash deploy/package.sh
 
+      - name: Download tested package
+        if: steps.tested.outputs.run != '' && hashFiles('deploy/package.sh') != '' && !endsWith(github.event.repository.name, '-config')
+        uses: actions/download-artifact@v8
+        with:
+          name: package
+          path: dist
+          run-id: ${{ steps.tested.outputs.run }}
+          github-token: ${{ github.token }}
+
       - name: Upload package
-        if: github.event_name == 'push' && hashFiles('deploy/package.sh') != '' && !endsWith(github.event.repository.name, '-config')
+        if: hashFiles('deploy/package.sh') != '' && !endsWith(github.event.repository.name, '-config')
         uses: actions/upload-artifact@v7
         with:
           name: package
