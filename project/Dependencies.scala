@@ -7,7 +7,7 @@ object Dependencies:
   /** The version to use for each dependency. */
   object V:
 
-    val tapir           = "1.14.0"
+    val tapir           = "1.14.1"
     val slf4j           = "2.0.20"
     val logback         = "1.6.6"
     val fs2             = "3.14.0"
@@ -45,8 +45,8 @@ object Dependencies:
   )
 
   lazy val assetLoader = libraryDependencies ++= Seq(
-    "com.alecdorrington"   %% "asset-loader"       % V.assetLoader,
-    "com.alecdorrington"   %% "asset-loader-tapir" % V.assetLoader,
+    "com.alecdorrington" %% "asset-loader"       % V.assetLoader,
+    "com.alecdorrington" %% "asset-loader-tapir" % V.assetLoader,
   )
 
   /** Library dependencies for logging. */
