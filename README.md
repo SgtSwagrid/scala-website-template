@@ -198,7 +198,7 @@ The following open-source libraries are used. You do not need to install these m
 Dependencies are defined in [Dependencies.scala](./project/Dependencies.scala).
 
 - **[scalafmt](https://scalameta.org/scalafmt/)** - a code formatter to ensure a consistent style (configured by [.scalafmt.conf](./.scalafmt.conf)).
-- **[Tapir 1.13](https://tapir.softwaremill.com/en/latest/)** - a layer to define and implement HTTP APIs.
+- **[Tapir 1.14](https://tapir.softwaremill.com/en/latest/)** - a layer to define and implement HTTP APIs.
 - **[Netty](https://netty.io/)** - an asynchronous web server for the JVM (integrated with Tapir, among other [options](https://tapir.softwaremill.com/en/latest/server/overview.html)).
 - **[Swagger](https://swagger.io/)** - a UI for exploring and testing server endpoints (integrated with Tapir, at [localhost:8080/docs](http://localhost:8080/docs) during development).
 - **[Prometheus](https://prometheus.io/)** - for metrics and performance monitoring (integrated with Tapir, served at `/metrics`).
@@ -206,7 +206,7 @@ Dependencies are defined in [Dependencies.scala](./project/Dependencies.scala).
 - **[Scala.js](https://www.scala-js.org/)** - the official Scala-to-JS transpiler.
 - **[Laminar 17](https://laminar.dev/)** - a library for building reactive web-based user interfaces (and extended by [laminext](https://github.com/tulz-app/laminext)).
 - **[Airstream](https://github.com/raquo/airstream)** - a [functional reactive programming](https://en.wikipedia.org/wiki/Functional_reactive_programming) library (required by Laminar).
-- **[Circe](https://circe.github.io/circe/)** - automatic serialisation/deserialisation to/from [JSON](https://www.json.org/json-en.html) (for client-server communication).
+- **[Circe](https://circe.io/circe/)** - automatic serialisation/deserialisation to/from [JSON](https://www.json.org/json-en.html) (for client-server communication).
 - **[Cats](https://typelevel.org/cats/)** - provides abstractions for functional programming (alongside [Cats Effect 3](https://typelevel.org/cats-effect/) and others).
 
 ## 👁️ See also
