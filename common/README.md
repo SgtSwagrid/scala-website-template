@@ -5,10 +5,11 @@ It is [cross-compiled](https://www.scala-js.org/doc/project/cross-build.html) - 
 
 ## When to Put Code Here
 
-Put code in `common` when it needs to be used by both the server and the client.
+Put code in `common` when it is, or could in principle be, used by both the server and the client, so that one implementation serves both.
 Typical candidates include:
 
 - **Shared data types** - case classes that are serialised (e.g. with [Circe](https://circe.io/circe/)) and exchanged between client and server.
+- **Communication protocols** - what the client and server say to one another, defined once for both.
 - **Pure algorithms** - logic with no platform-specific dependencies that is useful on both sides.
 
 ## Constraints

@@ -165,32 +165,12 @@ Shared configuration for the above is checked into the repository for a seamless
 
 ## 🏗️ Architecture
 
-The codebase is partitioned into three subprojects.
-All subprojects are written in [Scala](https://www.scala-lang.org/), but they are compiled in different ways.
-Build configurations for the subprojects can be found in [Subprojects.scala](./project/Subprojects.scala).
+The codebase is partitioned into three subprojects, all written in [Scala](https://www.scala-lang.org/) but compiled in different ways.
+Their build configurations can be found in [Subprojects.scala](./project/Subprojects.scala).
 
-### The [server](./server) subproject
-
-* Code which is deployed to a JVM-based backend server.
-* Responsible for database management and serving [HTTP](https://en.wikipedia.org/wiki/HTTP) or [WebSocket](https://en.wikipedia.org/wiki/WebSocket) requests.
-* This includes providing the *client* code (see below) to the user.
-* All web pages use a single minimalistic template, whose only job is to invoke the (appropriate part of the) *client* code.
-* The primary entry point is found in [Main.scala](./server/src/main/scala/Main.scala).
-
-### The [client](./client) subproject
-
-* Code which is [transpiled](https://en.wikipedia.org/wiki/Source-to-source_compiler) to a [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript)-based frontend and delivered to the user's browser.
-* Responsible for the user interface.
-* We exclusively use [client-side rendering (CSR)](https://developer.mozilla.org/en-US/docs/Glossary/CSR), meaning that all [DOM](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model) elements are constructed dynamically by the client.
-* All client code is packaged into a single source file (`main.js`) by the build system.
-
-### The [common](./common) subproject
-
-* Code which is common to both the *server* and *client*. That is, modules in *common* are freely available to the other subprojects.
-* Conversely, code in *server* or *client* cannot be referenced by any other subproject.
-* Code from *common* is compiled twice; once into JVM bytecode for the *server*, and once into JS for the *client*.
-* Used for defining common data types, algorithms, or communication protocols that are (or in principle could be) used by either.
-* Avoids source duplication: one implementation is enough.
+- **[server](./server)** - the backend, on the JVM.
+- **[client](./client)** - the frontend, compiled to JavaScript and run in the browser.
+- **[common](./common)** - code shared by the server and the client, compiled for both.
 
 ## 📋 Dependencies
 

@@ -1,6 +1,7 @@
 # Server
 
-The server subproject runs on the JVM and is responsible for handling HTTP requests and serving the website.
+The server subproject runs on the JVM. It serves [HTTP](https://en.wikipedia.org/wiki/HTTP) and [WebSocket](https://en.wikipedia.org/wiki/WebSocket) requests, and is where any database is managed.
+It also serves the website itself: every page is the same minimal template, whose only job is to load the [client](../client)'s code and show the page's view.
 It is built on [Cats Effect](https://typelevel.org/cats-effect/), [Tapir](https://tapir.softwaremill.com/), and [Netty](https://netty.io/).
 
 ## Entry Point
