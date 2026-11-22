@@ -1,7 +1,8 @@
 # Client
 
-The client subproject is compiled to JavaScript by [Scala.js](https://www.scala-js.org/) and delivered to the user's browser.
+The client subproject is compiled to JavaScript by [Scala.js](https://www.scala-js.org/) and delivered to the user's browser, where it draws the whole user interface.
 It uses [Laminar](https://laminar.dev/) for reactive, declarative UI construction.
+Rendering is entirely [client-side](https://developer.mozilla.org/en-US/docs/Glossary/CSR): the server sends no markup of its own, and every [DOM](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model) element is built here.
 
 The entire subproject is bundled into a single file, `main.js`, which is served by the server at `/assets/scripts/main.js`.
 
