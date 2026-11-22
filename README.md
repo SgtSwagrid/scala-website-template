@@ -105,7 +105,7 @@ In order to locally run or work on this project, you'll need to have the followi
 - **[Git](https://git-scm.com/)** - for version control.
 - **[Node.js](https://nodejs.org/)** - runs the tests of the *client*, which are compiled to JavaScript (only needed for `sbt test`).
 
-*Installing Scala separately isn't strictly required, as the correct version (currently [3.9.0](https://www.scala-lang.org/download/3.9.0.html)) will be fetched by sbt in the build process.
+*Installing Scala separately isn't strictly required, as the correct version (currently [3.10.1](https://www.scala-lang.org/download/3.10.1.html)) will be fetched by sbt in the build process.
 However, it may still be helpful for testing.
 
 ## ⬇️ Installation
