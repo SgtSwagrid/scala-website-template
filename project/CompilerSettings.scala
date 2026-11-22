@@ -8,7 +8,7 @@ object CompilerSettings extends AutoPlugin:
   override def trigger = allRequirements
 
   /** The Scala version used across all subprojects. */
-  val scala3 = "3.9.0"
+  val scala3 = "3.10.1"
 
   override lazy val buildSettings = Seq(
     javaOptions ++= Seq(
@@ -26,10 +26,11 @@ object CompilerSettings extends AutoPlugin:
 
       // Enable new experimental features:
       "-language:experimental.subCases",
-      "-language:experimental.relaxedLambdaSyntax",
       "-language:experimental.multiSpreads",
-      "-language:experimental.strictEqualityPatternMatching",
       "-language:experimental.erasedDefinitions",
+
+      // Enable preview features, such as relaxed lambda syntax:
+      "-preview",
     ),
 
     // The Scala version used across all subprojects:
