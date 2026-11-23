@@ -9,8 +9,8 @@ object Dependencies:
 
     val tapir           = "1.14.1"
     val slf4j           = "2.0.20"
-    val logback         = "1.6.7"
-    val fs2             = "3.14.0"
+    val logback         = "1.6.8"
+    val fs2             = "3.16.0"
     val assetLoader     = "0.2.7"
     val scalajs         = "2.8.1"
     val laminar         = "17.0.0"
